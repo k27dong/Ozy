@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/k27dong/discord-bot#readme",
   "dependencies": {
-    "NeteaseCloudMusicApi": "^4.0.3",
-    "discord.js": "^12.5.1"
+    "@discordjs/opus": "^0.4.0",
+    "NeteaseCloudMusicApi": "https://github.com/k27dong/NeteaseCloudMusicApi.git",
+    "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.2.7"
   }
 }
