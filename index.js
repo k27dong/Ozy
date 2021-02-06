@@ -2,12 +2,54 @@ const Discord = require("discord.js")
 const config = require("./config.json")
 const API = require("NeteaseCloudMusicApi")
 const HELP = require("./helper")
+const UTIL = require("./util")
 
 const client = new Discord.Client()
 client.login(config.BOT_TOKEN)
 const prefix = "!"
 
-let user, username, playlist, curr_playlist, curr_track
+/**
+ * @var {string} user NetEase user'id
+ * @var {string} username NetEase user's username
+ * @var {array of obj} playlist All playlist of a user
+ * @var {array of obj} curr_track Currently set track
+ * @var {} dispatcher
+ * @var {int} play_num number of songs left to play
+ */
+let user,
+  username,
+  playlist,
+  curr_playlist,
+  curr_track,
+  to_be_played,
+  dispatcher,
+  play_num = 0,
+  song_obj
+
+let login_status = API.login_cellphone({
+  phone: config.PHONENUM,
+  countrycode: config.COUNTRYCODE,
+  password: config.PASSWORD
+})
+
+const get_song_url = async (track) => {
+  let random_index = Math.floor(Math.random() * track.length)
+  let curr_song = await API.song_url({
+    id: track[random_index].info.id,
+  })
+
+  let url = curr_song.body.data[0].url
+
+  console.log(url)
+
+  return url === null
+    ? get_song_url(track)
+    : {
+        url: url,
+        index: random_index,
+        id: track[random_index].info.id
+      }
+}
 
 client.on("message", async (message) => {
   try {
@@ -59,7 +101,6 @@ client.on("message", async (message) => {
         throw "User not set"
       }
     } else if (command == "show_playlist") {
-      // display playlist
       if (user != undefined) {
         playlist_info = "```"
         for (let i = 0; i < playlist.length; i++) {
@@ -70,8 +111,14 @@ client.on("message", async (message) => {
       } else {
         throw "User not set"
       }
-    } else if (command === "playlist_info") {
-      if (args.length == 1) {
+    } else if (command === "helpme") {
+      message.channel.send(HELP.general_msg())
+    } else if (command === "set_playlist") {
+      if (typeof playlist === "undefined") {
+        throw "User not set"
+      } else if (args.length !== 1) {
+        throw "Invalid arguments"
+      } else {
         const selected_index = args[0]
         let playlist_data = []
 
@@ -79,11 +126,14 @@ client.on("message", async (message) => {
           id: playlist[selected_index].id,
         })
 
-        curr_track = curr_playlist.body.playlist.tracks
+        message.channel.send(
+          `Current track set to ${playlist[selected_index].name}`
+        )
 
+        curr_track = curr_playlist.body.playlist.tracks
         for (let i = 0; i < curr_track.length; i++) {
           curr_track[i] = {
-            author: {
+            info: {
               name: curr_track[i].name,
               id: curr_track[i].id,
             },
@@ -104,7 +154,7 @@ client.on("message", async (message) => {
           i++
         ) {
           playlist_data.push([
-            curr_track[i].author.name,
+            curr_track[i].info.name,
             curr_track[i].artist.name,
             curr_track[i].album.name,
           ])
@@ -117,17 +167,79 @@ client.on("message", async (message) => {
         info += "```"
 
         message.channel.send(info)
-      } else {
-        throw "Invalid arg"
       }
-    } else if (command === "helpme") {
-      message.channel.send(HELP.general_msg())
     } else if (command === "play") {
-      if (args.length == 1) {
-        // TODO
+      if (typeof curr_track === "undefined") {
+        throw "Track not set"
       } else {
-        throw "Invalid arg"
+        if (args.length === 1 && typeof args[0] === "number") {
+          play_num = args[0]
+        }
+
+        if (message.member.voice.channel) {
+          const connection = await message.member.voice.channel.join()
+
+          song_obj = await get_song_url(curr_track)
+
+          dispatcher = connection.play(song_obj.url)
+
+          dispatcher.on("start", () => {
+            message.channel.send(
+              `Playing: ${curr_track[song_obj.index].info.name} (${
+                curr_track[song_obj.index].artist.name
+              })`
+            )
+          })
+
+          dispatcher.on("finish", async () => {
+            if (typeof play_num === "undefined" || play_num > 0) {
+              // keep playing next song
+              if (typeof play_num !== "undefined") {
+                play_num--
+              }
+
+              song_obj = get_song_url(curr_track)
+              dispatcher = connection.play(song_obj.url)
+            } else {
+              message.member.voice.channel.leave()
+            }
+          })
+
+          dispatcher.on("error", () => {
+            console.error()
+            message.member.voice.channel.leave()
+          })
+        }
       }
+    } else if (command === "lyric" || command === "lyrics") {
+      if (typeof song_obj === 'undefined') {
+        throw "Nothing's playing"
+      }
+      else {
+        let curr_lyric = await API.lyric({
+          id: song_obj.id
+        })
+
+        if (curr_lyric.status == 200) {
+          message.channel.send(UTIL.parse_lrc(curr_lyric.body.lrc.lyric))
+        }
+      }
+    } else if (command === "stop") {
+      if (typeof dispatcher !== "undefined") {
+        dispatcher.destroy()
+        message.member.voice.channel.leave()
+      }
+    } else if (command === "pause") {
+      if (typeof dispatcher !== "undefined") {
+        dispatcher.pause(true)
+      }
+    } else if (command === "resume") {
+      if (typeof dispatcher !== "undefined") {
+        dispatcher.resume()
+      }
+    } else {
+      // unidentified command
+      message.channel.send(`Command not found: ${command}`)
     }
   } catch (err) {
     console.log(err)
