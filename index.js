@@ -21,15 +21,14 @@ let user,
   playlist,
   curr_playlist,
   curr_track,
-  to_be_played,
   dispatcher,
-  play_num = 0,
-  song_obj
+  song_obj,
+  connection
 
 let login_status = API.login_cellphone({
   phone: config.PHONENUM,
   countrycode: config.COUNTRYCODE,
-  password: config.PASSWORD
+  password: config.PASSWORD,
 })
 
 const get_song_url = async (track) => {
@@ -40,14 +39,12 @@ const get_song_url = async (track) => {
 
   let url = curr_song.body.data[0].url
 
-  console.log(url)
-
   return url === null
     ? get_song_url(track)
     : {
         url: url,
         index: random_index,
-        id: track[random_index].info.id
+        id: track[random_index].info.id,
       }
 }
 
@@ -130,7 +127,20 @@ client.on("message", async (message) => {
           `Current track set to ${playlist[selected_index].name}`
         )
 
-        curr_track = curr_playlist.body.playlist.tracks
+        trackIds_arr = curr_playlist.body.playlist.trackIds
+
+        let trackIds = ""
+        for (let i = 0; i < trackIds_arr.length - 1; i++) {
+          trackIds += `${trackIds_arr[i].id},`
+        }
+        trackIds += `${trackIds_arr[trackIds_arr.length - 1].id}`
+
+        curr_track = await API.song_detail({
+          ids: trackIds,
+        })
+
+        curr_track = curr_track.body.songs
+
         for (let i = 0; i < curr_track.length; i++) {
           curr_track[i] = {
             info: {
@@ -150,7 +160,7 @@ client.on("message", async (message) => {
 
         for (
           let i = 0;
-          i < (curr_track.length >= 20 ? 20 : curr_track.length);
+          i < (curr_track.length >= 30 ? 30 : curr_track.length);
           i++
         ) {
           playlist_data.push([
@@ -172,14 +182,13 @@ client.on("message", async (message) => {
       if (typeof curr_track === "undefined") {
         throw "Track not set"
       } else {
-        if (args.length === 1 && typeof args[0] === "number") {
-          play_num = args[0]
-        }
-
         if (message.member.voice.channel) {
-          const connection = await message.member.voice.channel.join()
-
+          connection = await message.member.voice.channel.join()
           song_obj = await get_song_url(curr_track)
+
+          if (UTIL.exist(dispatcher)) {
+            dispatcher.destroy()
+          }
 
           dispatcher = connection.play(song_obj.url)
 
@@ -192,17 +201,13 @@ client.on("message", async (message) => {
           })
 
           dispatcher.on("finish", async () => {
-            if (typeof play_num === "undefined" || play_num > 0) {
-              // keep playing next song
-              if (typeof play_num !== "undefined") {
-                play_num--
-              }
-
-              song_obj = get_song_url(curr_track)
-              dispatcher = connection.play(song_obj.url)
-            } else {
-              message.member.voice.channel.leave()
-            }
+            song_obj = get_song_url(curr_track)
+            connection.play(song_obj.url)
+            message.channel.send(
+              `Playing: ${curr_track[song_obj.index].info.name} (${
+                curr_track[song_obj.index].artist.name
+              })`
+            )
           })
 
           dispatcher.on("error", () => {
@@ -211,13 +216,45 @@ client.on("message", async (message) => {
           })
         }
       }
-    } else if (command === "lyric" || command === "lyrics") {
-      if (typeof song_obj === 'undefined') {
+    } else if (command === "curr_track") {
+      // TODO
+    } else if (command === "next") {
+      if (!UTIL.exist(dispatcher) || !UTIL.exist(connection)) {
         throw "Nothing's playing"
       }
-      else {
+      dispatcher.destroy()
+      song_obj = await get_song_url(curr_track)
+
+      dispatcher = connection.play(song_obj.url)
+
+      dispatcher.on("start", () => {
+        message.channel.send(
+          `Playing: ${curr_track[song_obj.index].info.name} (${
+            curr_track[song_obj.index].artist.name
+          })`
+        )
+      })
+
+      dispatcher.on("end", async () => {
+        song_obj = get_song_url(curr_track)
+        connection.play(song_obj.url)
+        message.channel.send(
+          `Playing: ${curr_track[song_obj.index].info.name} (${
+            curr_track[song_obj.index].artist.name
+          })`
+        )
+      })
+
+      dispatcher.on("error", () => {
+        console.error()
+        message.member.voice.channel.leave()
+      })
+    } else if (command === "lyric" || command === "lyrics") {
+      if (typeof song_obj === "undefined") {
+        throw "Nothing's playing"
+      } else {
         let curr_lyric = await API.lyric({
-          id: song_obj.id
+          id: song_obj.id,
         })
 
         if (curr_lyric.status == 200) {
