@@ -53,8 +53,8 @@ client.on("message", async (message) => {
     if (message.author.bot) return
     if (!message.content.startsWith(prefix)) return
 
-    const commandBody = message.content.slice(prefix.length)
-    const args = commandBody.split(" ")
+    const command_body = message.content.slice(prefix.length)
+    const args = command_body.split(" ")
     const command = args.shift().toLowerCase()
 
     if (command === "ping") {
@@ -217,7 +217,7 @@ client.on("message", async (message) => {
         }
       }
     } else if (command === "curr_track") {
-      // TODO
+      // TODO: display current track
     } else if (command === "next") {
       if (!UTIL.exist(dispatcher) || !UTIL.exist(connection)) {
         throw "Nothing's playing"
@@ -235,7 +235,8 @@ client.on("message", async (message) => {
         )
       })
 
-      dispatcher.on("end", async () => {
+      // TODO: fix this
+      dispatcher.on("finish", async () => {
         song_obj = get_song_url(curr_track)
         connection.play(song_obj.url)
         message.channel.send(
@@ -262,16 +263,16 @@ client.on("message", async (message) => {
         }
       }
     } else if (command === "stop") {
-      if (typeof dispatcher !== "undefined") {
+      if (UTIL.exist(dispatcher)) {
         dispatcher.destroy()
         message.member.voice.channel.leave()
       }
     } else if (command === "pause") {
-      if (typeof dispatcher !== "undefined") {
+      if (UTIL.exist(dispatcher)) {
         dispatcher.pause(true)
       }
     } else if (command === "resume") {
-      if (typeof dispatcher !== "undefined") {
+      if (UTIL.exist(dispatcher)) {
         dispatcher.resume()
       }
     } else {
