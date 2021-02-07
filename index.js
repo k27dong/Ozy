@@ -13,8 +13,9 @@ const prefix = "!"
  * @var {string} username NetEase user's username
  * @var {array of obj} playlist All playlist of a user
  * @var {array of obj} curr_track Currently set track
- * @var {} dispatcher
- * @var {int} play_num number of songs left to play
+ * @var {obj} dispatcher
+ * @var {obj} song_obj Song object that's currently playing
+ * @var {obj} connection
  */
 let user,
   username,
@@ -92,13 +93,13 @@ client.on("message", async (message) => {
         HELP.help_array[Math.floor(Math.random() * HELP.help_array.length)]
       )
     } else if (command === "current_user") {
-      if (typeof user !== "undefined") {
+      if (UTIL.exist(username)) {
         message.channel.send(`Current user: ${username}`)
       } else {
         throw "User not set"
       }
     } else if (command == "show_playlist") {
-      if (user != undefined) {
+      if (UTIL.exist(user)) {
         playlist_info = "```"
         for (let i = 0; i < playlist.length; i++) {
           playlist_info += `${i}: ${playlist[i].name} (播放量: ${playlist[i].playCount})\n`
@@ -111,7 +112,7 @@ client.on("message", async (message) => {
     } else if (command === "helpme") {
       message.channel.send(HELP.general_msg())
     } else if (command === "set_playlist") {
-      if (typeof playlist === "undefined") {
+      if (!UTIL.exist(playlist)) {
         throw "User not set"
       } else if (args.length !== 1) {
         throw "Invalid arguments"
@@ -178,42 +179,39 @@ client.on("message", async (message) => {
 
         message.channel.send(info)
       }
+    } else if (command === "playtest") {
+      // connection = await message.member.voice.channel.join()
+
+      // const play = () => {
+      //   dispatcher = connection.play(testmp3).on("finish", play)
+      // }
+
+      // play()
     } else if (command === "play") {
-      if (typeof curr_track === "undefined") {
+      if (!UTIL.exist(curr_track)) {
         throw "Track not set"
       } else {
         if (message.member.voice.channel) {
           connection = await message.member.voice.channel.join()
-          song_obj = await get_song_url(curr_track)
 
           if (UTIL.exist(dispatcher)) {
             dispatcher.destroy()
           }
 
-          dispatcher = connection.play(song_obj.url)
+          const play = async () => {
+            next_song = await get_song_url(curr_track)
+            song_obj = next_song
 
-          dispatcher.on("start", () => {
             message.channel.send(
-              `Playing: ${curr_track[song_obj.index].info.name} (${
-                curr_track[song_obj.index].artist.name
+              `Playing: ${curr_track[next_song.index].info.name} (${
+                curr_track[next_song.index].artist.name
               })`
             )
-          })
 
-          dispatcher.on("finish", async () => {
-            song_obj = get_song_url(curr_track)
-            connection.play(song_obj.url)
-            message.channel.send(
-              `Playing: ${curr_track[song_obj.index].info.name} (${
-                curr_track[song_obj.index].artist.name
-              })`
-            )
-          })
+            dispatcher = connection.play(next_song.url).on("finish", play)
+          }
 
-          dispatcher.on("error", () => {
-            console.error()
-            message.member.voice.channel.leave()
-          })
+          play()
         }
       }
     } else if (command === "curr_track") {
@@ -223,35 +221,10 @@ client.on("message", async (message) => {
         throw "Nothing's playing"
       }
       dispatcher.destroy()
-      song_obj = await get_song_url(curr_track)
 
-      dispatcher = connection.play(song_obj.url)
-
-      dispatcher.on("start", () => {
-        message.channel.send(
-          `Playing: ${curr_track[song_obj.index].info.name} (${
-            curr_track[song_obj.index].artist.name
-          })`
-        )
-      })
-
-      // TODO: fix this
-      dispatcher.on("finish", async () => {
-        song_obj = get_song_url(curr_track)
-        connection.play(song_obj.url)
-        message.channel.send(
-          `Playing: ${curr_track[song_obj.index].info.name} (${
-            curr_track[song_obj.index].artist.name
-          })`
-        )
-      })
-
-      dispatcher.on("error", () => {
-        console.error()
-        message.member.voice.channel.leave()
-      })
+      play(message)
     } else if (command === "lyric" || command === "lyrics") {
-      if (typeof song_obj === "undefined") {
+      if (!UTIL.exist(song_obj)) {
         throw "Nothing's playing"
       } else {
         let curr_lyric = await API.lyric({
