@@ -179,14 +179,6 @@ client.on("message", async (message) => {
 
         message.channel.send(info)
       }
-    } else if (command === "playtest") {
-      // connection = await message.member.voice.channel.join()
-
-      // const play = () => {
-      //   dispatcher = connection.play(testmp3).on("finish", play)
-      // }
-
-      // play()
     } else if (command === "play") {
       if (!UTIL.exist(curr_track)) {
         throw "Track not set"
@@ -222,7 +214,20 @@ client.on("message", async (message) => {
       }
       dispatcher.destroy()
 
-      play(message)
+      const play = async () => {
+        next_song = await get_song_url(curr_track)
+        song_obj = next_song
+
+        message.channel.send(
+          `Playing: ${curr_track[next_song.index].info.name} (${
+            curr_track[next_song.index].artist.name
+          })`
+        )
+
+        dispatcher = connection.play(next_song.url).on("finish", play)
+      }
+
+      play()
     } else if (command === "lyric" || command === "lyrics") {
       if (!UTIL.exist(song_obj)) {
         throw "Nothing's playing"
