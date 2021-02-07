@@ -38,3 +38,7 @@ exports.parse_lrc = (lrc) => {
   prased += "```"
   return prased
 }
+
+exports.exist = (param) => {
+  return typeof param !== 'undefined'
+}
