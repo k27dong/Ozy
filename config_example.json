@@ -1,0 +1,7 @@
+{
+  "README": "This is the template of the config file",
+  "BOT_TOKEN": "Provided by discord",
+  "PHONENUM": "Used to login to an account",
+  "COUNTRYCODE": "1",
+  "PASSWORD": "*******"
+}

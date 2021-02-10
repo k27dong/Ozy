@@ -1,4 +1,16 @@
-exports.help_array = [
+const ozy_poem =
+  '```\
+In Egypt\'s sandy silence, all alone,\n\
+Stands a gigantic Leg, which far off throws\n\
+The only shadow that the Desert knows:—\n\
+"I am great OZYMANDIAS," saith the stone,\n\
+"The King of Kings; this mighty City shows\n\
+The wonders of my hand."— The City\'s gone,—\n\
+Naught but the Leg remaining to disclose\n\
+The site of this forgotten Babylon.\n\
+```'
+
+const help_array = [
   "```\
 Johnny's in the basement\n\
 Mixing up the medicine\n\
@@ -51,12 +63,44 @@ Don't wear sandals\n\
 Try to avoid the scandals```",
 ]
 
-exports.general_msg = () => {
-  const msg = ```command list:\n\
+const command_list =
+  "```command list:\n\
 set_user [id]: set current user\n\
 current_user: display info about current user\n\
 show_playlist: show current user's playlist\n\
-playlist_info [index]\n\
-```
-  return msg
+set_playlist [index]\n\
+play\n\
+pause\n\
+resume\n\
+stop\n\
+rename [name]\n\
+use '!helpme more' for more information\n\
+```"
+
+const tips_1 =
+  "```\
+1. !set_user [your id] to set the current user\n\
+2. !show_playlist to display all your playlist\n\
+3. !set_playlist to select a playlist\n\
+4. !play start playing\n\
+```"
+
+const display_track = (track) => {
+  if (track.length === 0) {
+    return "```Track empty!```"
+  }
+
+  let queue = "```"
+  for (let i = 0; i < track.length; i++) {
+    let item = track[i].song
+    queue += `${track[i].pos + 1}) ${item.name} (${item.ar.name})`
+    queue += track[i].curr ? `   ◄———— \n` : `\n`
+  }
+
+  queue += "```"
+
+  return queue
 }
+
+exports.display_track = display_track
+exports.ozy_poem = ozy_poem

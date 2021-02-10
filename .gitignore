@@ -1,6 +1,8 @@
 # Bot Token
 config.json
 
+old.js
+
 # Logs
 logs
 *.log

@@ -1,4 +1,4 @@
-exports.shuffle = (arr) => {
+const shuffle = (arr) => {
   var curr_index = arr.length,
     temp,
     ran_index
@@ -15,7 +15,10 @@ exports.shuffle = (arr) => {
   return arr
 }
 
-exports.parse_lrc = (lrc) => {
+const parse_lrc = (lrc) => {
+  if (typeof lrc === "undefined") {
+    return "```No lyrics available```"
+  }
   let sanitized = lrc.split("\n")
   for (let i = 0; i < sanitized.length; i++) {
     let l = sanitized[i]
@@ -38,6 +41,9 @@ exports.parse_lrc = (lrc) => {
   return prased
 }
 
-exports.exist = (param) => {
+const exist = (param) => {
   return typeof param !== "undefined"
 }
+
+exports.exist = exist
+exports.parse_lrc = parse_lrc
