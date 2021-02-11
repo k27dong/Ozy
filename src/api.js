@@ -84,11 +84,11 @@ const get_raw_lyric_by_id = async (id) => {
 
 const set_user_by_id = async (id, channel) => {
   let user_q = await user_detail({
-    uid: id
+    uid: id,
   })
 
   let playlist_q = await user_playlist({
-    uid: id
+    uid: id,
   })
 
   assert_status_code(user_q)
@@ -101,7 +101,7 @@ const set_user_by_id = async (id, channel) => {
       id: p.id,
       name: p.name,
       playCount: p.playCount,
-      trackCount: p.trackCount
+      trackCount: p.trackCount,
     })
   }
 
@@ -109,7 +109,7 @@ const set_user_by_id = async (id, channel) => {
 
   return {
     username: user_q.body.profile.nickname,
-    playlist: playlist
+    playlist: playlist,
   }
 }
 

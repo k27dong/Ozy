@@ -168,7 +168,7 @@ client.on("message", async (message) => {
         break
       case "user":
         user = API.set_user_by_id(args[0], channel)
-        break;
+        break
       default:
         message.channel.send(`Command not found: ${command}`)
     }
