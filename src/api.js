@@ -3,6 +3,8 @@ const {
   cloudsearch,
   song_url,
   lyric,
+  user_detail,
+  user_playlist,
 } = require("NeteaseCloudMusicApi")
 
 const assert_status_code = (res) => {
@@ -80,7 +82,39 @@ const get_raw_lyric_by_id = async (id) => {
   return lyric_q.body.lrc.lyric
 }
 
+const set_user_by_id = async (id, channel) => {
+  let user_q = await user_detail({
+    uid: id
+  })
+
+  let playlist_q = await user_playlist({
+    uid: id
+  })
+
+  assert_status_code(user_q)
+  assert_status_code(playlist_q)
+
+  playlist = []
+
+  for (let p of playlist_q.body.playlist) {
+    playlist.push({
+      id: p.id,
+      name: p.name,
+      playCount: p.playCount,
+      trackCount: p.trackCount
+    })
+  }
+
+  channel.send(`Selected user: ${user_q.body.profile.nickname}`)
+
+  return {
+    username: user_q.body.profile.nickname,
+    playlist: playlist
+  }
+}
+
 exports.login = login
 exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
 exports.get_raw_lyric_by_id = get_raw_lyric_by_id
+exports.set_user_by_id = set_user_by_id

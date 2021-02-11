@@ -10,6 +10,7 @@ let pos = 0
 let connection, dispatcher
 let g_message
 let pass_flag = false
+let user
 
 const client = new Discord.Client()
 
@@ -156,6 +157,18 @@ client.on("message", async (message) => {
       case "whoami":
         message.channel.send(MSG.ozy_poem)
         break
+      case "clear":
+        if (UTIL.exist(dispatcher)) {
+          dispatcher.destroy()
+          message.member.voice.channel.leave()
+        }
+        track = []
+        pos = 0
+        message.channel.send("```Track cleared!```")
+        break
+      case "user":
+        user = API.set_user_by_id(args[0], channel)
+        break;
       default:
         message.channel.send(`Command not found: ${command}`)
     }
