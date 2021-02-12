@@ -63,28 +63,6 @@ Don't wear sandals\n\
 Try to avoid the scandals```",
 ]
 
-const command_list =
-  "```command list:\n\
-set_user [id]: set current user\n\
-current_user: display info about current user\n\
-show_playlist: show current user's playlist\n\
-set_playlist [index]\n\
-play\n\
-pause\n\
-resume\n\
-stop\n\
-rename [name]\n\
-use '!helpme more' for more information\n\
-```"
-
-const tips_1 =
-  "```\
-1. !set_user [your id] to set the current user\n\
-2. !show_playlist to display all your playlist\n\
-3. !set_playlist to select a playlist\n\
-4. !play start playing\n\
-```"
-
 const display_track = (track) => {
   if (track.length === 0) {
     return "```Track empty!```"
@@ -102,5 +80,14 @@ const display_track = (track) => {
   return queue
 }
 
+const help_1 = () => {
+  let h = "```"
+
+  h += "```"
+
+  return h
+}
+
 exports.display_track = display_track
 exports.ozy_poem = ozy_poem
+exports.help_1 = help_1

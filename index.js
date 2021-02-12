@@ -130,6 +130,39 @@ client.on("message", async (message) => {
         pass_flag = false
         play()
         break
+      case "remove":
+        if (args.length !== 1) {
+          throw "Invalid args"
+        }
+        let remove_pos = Number(args[0])
+
+        if (
+          !Number.isInteger(remove_pos) ||
+          remove_pos <= 0 ||
+          remove_pos > track.length
+        ) {
+          throw `${remove_pos} is not a valid index`
+        }
+
+        let real_remove_pos = remove_pos - 1
+
+        if (real_remove_pos === pos) {
+          let throw_msg = "cannot remove song that is currently playing"
+          if (pos === 0) {
+            throw_msg += ", if there's only one song, use !clear"
+          }
+          throw throw_msg
+        }
+
+        message.channel.send(`Removed ${track[real_remove_pos].name}`)
+
+        track.splice(real_remove_pos, 1)
+
+        if (real_remove_pos < pos) {
+          pos--
+        }
+
+        break
       case "lyric":
       case "lyrics":
         if (!UTIL.exist(track[pos])) {
@@ -167,7 +200,26 @@ client.on("message", async (message) => {
         message.channel.send("```Track cleared!```")
         break
       case "user":
-        user = API.set_user_by_id(args[0], channel)
+        if (args.length !== 1) {
+          throw "Invalid args"
+        }
+        let input_id = Number(args[0])
+
+        if (Number.isInteger(input_id)) {
+          user = API.set_user_by_id(input_id, channel)
+        } else {
+          throw "Invalid arg"
+        }
+        break
+      case "list":
+        break
+      case "pa":
+      case "album":
+      case "playalbum":
+        break
+      case "h":
+      case "help":
+        message.channel.send(MSG.help_1())
         break
       default:
         message.channel.send(`Command not found: ${command}`)

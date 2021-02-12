@@ -113,8 +113,14 @@ const set_user_by_id = async (id, channel) => {
   }
 }
 
+const set_user_by_exact_name = (name, channel) => {
+  // does this api even exist lmao
+  throw "Invalid args"
+}
+
 exports.login = login
 exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
 exports.get_raw_lyric_by_id = get_raw_lyric_by_id
 exports.set_user_by_id = set_user_by_id
+exports.set_user_by_exact_name = set_user_by_exact_name
