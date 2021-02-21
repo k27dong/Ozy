@@ -199,6 +199,23 @@ client.on("message", async (message) => {
         pos = 0
         message.channel.send("```Track cleared!```")
         break
+      case "shuffle":
+        let temp_curr = undefined
+
+        if (UTIL.exist(dispatcher)) {
+          temp_curr = track[pos]
+        }
+
+        track = UTIL.shuffle(track)
+        pos = 0
+
+        if (UTIL.exist(temp_curr)) {
+          track = UTIL.remove_element_from_array(track, temp_curr)
+          track.unshift(temp_curr)
+        }
+
+        message.react("✅")
+        break
       case "user":
         if (args.length !== 1) {
           throw "Invalid args"
@@ -216,6 +233,26 @@ client.on("message", async (message) => {
       case "pa":
       case "album":
       case "playalbum":
+        if (args.length === 0) {
+          throw "Invalid args"
+        }
+
+        let album_keywords = ""
+        for (let word of args) {
+          album_keywords += `${word} `
+        }
+
+        let search_results = await API.search_album(album_keywords)
+
+        message.channel
+          .send(UTIL.parse_album_list(search_results))
+          .then(async (message) => {
+            for (let i = 0; i < search_results.length; i++) {
+              console.log(VAL.NUM_EMOJI[i+1])
+              await message.react(VAL.NUM_EMOJI[i+1])
+            }
+          })
+
         break
       case "h":
       case "help":
