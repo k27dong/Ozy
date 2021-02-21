@@ -1,4 +1,4 @@
-var _ = require('lodash');
+var _ = require("lodash")
 
 const shuffle = (arr) => {
   var curr_index = arr.length,

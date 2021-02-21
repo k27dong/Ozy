@@ -146,7 +146,7 @@ const search_album = async (keywords) => {
       size: raw_album[i].size,
       pic: raw_album[i].picUrl,
       date: raw_album[i].publishTime,
-      ar: raw_album[i].artists[0].name
+      ar: raw_album[i].artists[0].name,
     }
 
     result.push(temp_obj)

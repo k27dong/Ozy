@@ -248,8 +248,7 @@ client.on("message", async (message) => {
           .send(UTIL.parse_album_list(search_results))
           .then(async (message) => {
             for (let i = 0; i < search_results.length; i++) {
-              console.log(VAL.NUM_EMOJI[i+1])
-              await message.react(VAL.NUM_EMOJI[i+1])
+              await message.react(VAL.NUM_EMOJI[i + 1])
             }
           })
 
