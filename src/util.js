@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 const shuffle = (arr) => {
   var curr_index = arr.length,
     temp,
@@ -45,5 +47,47 @@ const exist = (param) => {
   return typeof param !== "undefined"
 }
 
+const parse_album_list = (list) => {
+  // `1) 黑梦 (窦唯, 1994) [10 songs]`
+
+  let msg = "```"
+
+  for (let i = 0; i < list.length; i++) {
+    let temp_date = new Date(list[i].date)
+    msg += `${i + 1})    ${list[i].name} (${
+      list[i].ar
+    }, ${temp_date.getFullYear()})`
+    msg += ` [${list[i].size} song${list[i].size > 1 ? "s" : ""}]\n`
+  }
+
+  msg += "```"
+
+  return msg
+}
+
+/**
+ * if e exists in arr, remove its first appearance
+ * @param {array} arr target array
+ * @param {object} e an element in the array
+ */
+const remove_element_from_array = (arr, e) => {
+  let sanitized_arr = []
+  let flag = false
+
+  for (let i = 0; i < arr.length; i++) {
+    if (_.isEqual(arr[i], e) && !flag) {
+      flag = true
+      continue
+    }
+
+    sanitized_arr.push(arr[i])
+  }
+
+  return sanitized_arr
+}
+
 exports.exist = exist
 exports.parse_lrc = parse_lrc
+exports.shuffle = shuffle
+exports.parse_album_list = parse_album_list
+exports.remove_element_from_array = remove_element_from_array

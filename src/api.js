@@ -118,9 +118,47 @@ const set_user_by_exact_name = (name, channel) => {
   throw "Invalid args"
 }
 
+const search_album = async (keywords) => {
+  let search_q = await cloudsearch({
+    keywords: keywords,
+    type: 10, // for album search
+  })
+
+  assert_status_code(search_q)
+
+  let result = []
+
+  if (search_q.body.result.albumCount === 0) {
+    return result
+  }
+
+  let raw_album = search_q.body.result.albums
+
+  for (
+    let i = 0;
+    i <
+    (search_q.body.result.albumCount > 6 ? 6 : search_q.body.result.albumCount);
+    i++
+  ) {
+    let temp_obj = {
+      name: raw_album[i].name,
+      id: raw_album[i].id,
+      size: raw_album[i].size,
+      pic: raw_album[i].picUrl,
+      date: raw_album[i].publishTime,
+      ar: raw_album[i].artists[0].name
+    }
+
+    result.push(temp_obj)
+  }
+
+  return result
+}
+
 exports.login = login
 exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
 exports.get_raw_lyric_by_id = get_raw_lyric_by_id
 exports.set_user_by_id = set_user_by_id
 exports.set_user_by_exact_name = set_user_by_exact_name
+exports.search_album = search_album
