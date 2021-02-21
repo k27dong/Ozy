@@ -20,6 +20,7 @@
     "@discordjs/opus": "^0.4.0",
     "NeteaseCloudMusicApi": "https://github.com/k27dong/NeteaseCloudMusicApi.git",
     "discord.js": "^12.5.1",
-    "ffmpeg-static": "^4.2.7"
+    "ffmpeg-static": "^4.2.7",
+    "lodash": "^4.17.21"
   }
 }
