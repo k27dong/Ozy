@@ -5,14 +5,25 @@ const {
   lyric,
   user_detail,
   user_playlist,
+  album,
 } = require("NeteaseCloudMusicApi")
 
+/**
+ * Check if the api call returns a valid resule
+ * @param {Object} res result from an api call
+ */
 const assert_status_code = (res) => {
   if (res.status != 200) {
     throw `code ${res.status}`
   }
 }
 
+/**
+ * login to an account
+ * @param {number} phonenum phone number used to login
+ * @param {number} countrycode
+ * @param {string} password
+ */
 const login = async (phonenum, countrycode, password) => {
   let login_q = await login_cellphone({
     phone: phonenum,
@@ -28,6 +39,12 @@ const login = async (phonenum, countrycode, password) => {
   }
 }
 
+/**
+ * Search for a song and add the first result to the track
+ * @param {Object[]} track list of songs to play
+ * @param {string} keywords used to search in the server
+ * @param {Object} channel discord channel for the message to be sent
+ */
 const search_and_add = async (track, keywords, channel) => {
   let search_q = await cloudsearch({
     keywords: keywords,
@@ -60,6 +77,10 @@ const search_and_add = async (track, keywords, channel) => {
   return track
 }
 
+/**
+ * Get the url for a song by id
+ * @param {number} id
+ */
 const get_song_url_by_id = async (id) => {
   let song_q = await song_url({
     id: id,
@@ -72,6 +93,10 @@ const get_song_url_by_id = async (id) => {
   return url
 }
 
+/**
+ * Get the raw lyric of a song by id
+ * @param {number} id
+ */
 const get_raw_lyric_by_id = async (id) => {
   let lyric_q = await lyric({
     id: id,
@@ -118,6 +143,10 @@ const set_user_by_exact_name = (name, channel) => {
   throw "Invalid args"
 }
 
+/**
+ * Search for an album and return the first few results
+ * @param {string} keywords used to search in the server
+ */
 const search_album = async (keywords) => {
   let search_q = await cloudsearch({
     keywords: keywords,
@@ -155,6 +184,42 @@ const search_album = async (keywords) => {
   return result
 }
 
+/**
+ * Add all songs from an album to the track
+ * @param {Object} al info of an album
+ * @param {Object[]} track list of songs to be played
+ * @param {Object} channel discord channel for the message to be sent
+ */
+const add_album = async (al, track, channel) => {
+  let album_q = await album({
+    id: al.id,
+  })
+
+  assert_status_code(album_q)
+
+  let result = album_q.body.songs
+
+  for (let i = 0; i < result.length; i++) {
+    let new_song = {
+      name: result[i].name,
+      id: result[i].id,
+      ar: {
+        name: result[i].ar[0].name,
+        id: result[i].ar[0].id,
+      },
+      al: {
+        name: result[i].al.name,
+        id: result[i].al.id,
+      },
+    }
+    track.push(new_song)
+  }
+
+  channel.send(`Queued all songs from ${al.name}`)
+
+  return track
+}
+
 exports.login = login
 exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
@@ -162,3 +227,4 @@ exports.get_raw_lyric_by_id = get_raw_lyric_by_id
 exports.set_user_by_id = set_user_by_id
 exports.set_user_by_exact_name = set_user_by_exact_name
 exports.search_album = search_album
+exports.add_album = add_album
