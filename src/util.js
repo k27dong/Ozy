@@ -1,4 +1,5 @@
-var _ = require("lodash")
+const _ = require("lodash")
+const VAL = require("./const")
 
 const shuffle = (arr) => {
   var curr_index = arr.length,
@@ -86,8 +87,15 @@ const remove_element_from_array = (arr, e) => {
   return sanitized_arr
 }
 
+const filter = (reaction, user) => {
+  return (
+    VAL.NUM_EMOJI.includes(reaction.emoji.name)
+  )
+}
+
 exports.exist = exist
 exports.parse_lrc = parse_lrc
 exports.shuffle = shuffle
 exports.parse_album_list = parse_album_list
 exports.remove_element_from_array = remove_element_from_array
+exports.filter = filter

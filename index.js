@@ -250,8 +250,28 @@ client.on("message", async (message) => {
             for (let i = 0; i < search_results.length; i++) {
               await message.react(VAL.NUM_EMOJI[i + 1])
             }
-          })
 
+            message
+              .awaitReactions(UTIL.filter, {
+                max: 1,
+                time: 60000,
+                errors: ["time"],
+              })
+              .then(async (collected) => {
+                const reaction = collected.first()
+
+                track = await API.add_album(
+                  search_results[
+                    VAL.NUM_EMOJI.indexOf(reaction.emoji.name) - 1
+                  ],
+                  track,
+                  message.channel
+                )
+              })
+              .catch(() => {
+                message.reply("invalid reaction")
+              })
+          })
         break
       case "h":
       case "help":
