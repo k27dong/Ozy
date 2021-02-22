@@ -1,6 +1,10 @@
 const _ = require("lodash")
 const VAL = require("./const")
 
+/**
+ * Randomly sort the element in an array
+ * @param {Array} arr An array of arbitary type of element
+ */
 const shuffle = (arr) => {
   var curr_index = arr.length,
     temp,
@@ -18,6 +22,10 @@ const shuffle = (arr) => {
   return arr
 }
 
+/**
+ * Process the raw lyrics to readable text
+ * @param {string} lrc raw lyrics returned from the NetEase server
+ */
 const parse_lrc = (lrc) => {
   if (typeof lrc === "undefined") {
     return "```No lyrics available```"
@@ -44,10 +52,18 @@ const parse_lrc = (lrc) => {
   return prased
 }
 
+/**
+ * Check if param has a value
+ * @param {anything} param
+ */
 const exist = (param) => {
   return typeof param !== "undefined"
 }
 
+/**
+ * Parse the list of album objects to readable text
+ * @param {Object[]} list
+ */
 const parse_album_list = (list) => {
   // `1) 黑梦 (窦唯, 1994) [10 songs]`
 
