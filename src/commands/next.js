@@ -1,3 +1,4 @@
+const { assert_queue } = require("../helper")
 const { play_next } = require("../player")
 
 module.exports = {
@@ -7,6 +8,9 @@ module.exports = {
 
   run: async (client, message, args) => {
     try {
+      let queue = assert_queue(message)
+      queue.playing = true
+
       play_next(message)
     } catch (err) {
       console.error(err)
