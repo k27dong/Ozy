@@ -10,6 +10,12 @@ const play = async (message) => {
     return
   }
 
+  if (!channel) {
+    queue.playing = false
+    message.channel.send(`You're not in a voice channel!`)
+    return
+  }
+
   if (!queue.connection) {
     queue.connection = await channel.join()
   }
@@ -48,6 +54,7 @@ const play_next = async (message) => {
 
   if (queue.track.length === 0) {
     message.channel.send(`Nothing to play!`)
+    queue.playing = false
     return
   }
 
@@ -60,9 +67,24 @@ const play_next = async (message) => {
       play(message)
     } else {
       queue.playing = false
+      message.channel.send("End of queue.")
     }
   }
 }
 
+const play_prev = async (message) => {
+  let queue = assert_queue(message)
+
+  if (queue.track.length === 0) {
+    message.channel.send(`Track empty!`)
+    queue.playing = false
+    return
+  }
+
+  queue.curr_pos = Math.max(queue.curr_pos - 1, 0)
+  play(message)
+}
+
 exports.play = play
 exports.play_next = play_next
+exports.play_prev = play_prev

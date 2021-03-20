@@ -2,8 +2,7 @@ exports.run = (client, message, args) => {
   if (!args || args.length < 1) {
     // TODO: reload all
     return message.reply("Must provide a command name to reload.")
-  }
-  else {
+  } else {
     const command_name = args[0]
 
     if (!client.commands.has(command_name)) {

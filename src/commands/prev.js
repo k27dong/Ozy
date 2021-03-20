@@ -1,9 +1,9 @@
 const { assert_queue } = require("../helper")
-const { play_next } = require("../player")
+const { play_prev } = require("../player")
 
 module.exports = {
   info: {
-    name: "next",
+    name: "prev",
   },
 
   run: async (client, message, args) => {
@@ -11,10 +11,10 @@ module.exports = {
       let queue = assert_queue(message)
       queue.playing = true
 
-      play_next(message)
+      play_prev(message)
     } catch (err) {
       console.error(err)
-      message.channel.send(`Error (next): ${err}`)
+      message.channel.send(`Error (prev): ${err}`)
     }
   },
 }

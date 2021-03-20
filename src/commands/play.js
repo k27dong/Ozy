@@ -37,7 +37,7 @@ module.exports = {
       }
     } catch (err) {
       console.error(err)
-      message.channel.send(`Error (${this.info.name}): ${err}`)
+      message.channel.send(`Error (play): ${err}`)
     }
   },
 }

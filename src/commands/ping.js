@@ -5,6 +5,11 @@ module.exports = {
   },
 
   run: (client, message, args) => {
-    message.channel.send("pong!").catch(console.error)
+    try {
+      message.channel.send("pong!")
+    } catch (err) {
+      console.error(err)
+      message.channel.send(`Error (ping): ${err}`)
+    }
   },
 }

@@ -9,13 +9,14 @@ module.exports = {
     try {
       let queue = assert_queue(message)
 
-      queue.playing = false
-      queue.connection.dispatcher.pause()
-
-      message.channel.send("Ozy paused!")
+      if (!!queue.connection) {
+        queue.playing = false
+        queue.connection.dispatcher.pause()
+        message.channel.send("Ozy paused!")
+      }
     } catch (err) {
       console.error(err)
-      message.channel.send(`Error (${this.info.name}): ${err}`)
+      message.channel.send(`Error (pause): ${err}`)
     }
   },
 }

@@ -104,9 +104,31 @@ const remove_element_from_array = (arr, e) => {
 }
 
 const filter = (reaction, user) => {
-  return (
-    VAL.NUM_EMOJI.includes(reaction.emoji.name)
-  )
+  return VAL.NUM_EMOJI.includes(reaction.emoji.name)
+}
+
+const formulate_command = (command) => {
+  switch (command) {
+    case "p":
+    case "play":
+    case "playsong":
+      return "play"
+    case "q":
+    case "queue":
+      return "queue"
+    case "lyric":
+    case "lyrics":
+      return "lyric"
+    case "pa":
+    case "album":
+    case "playalbum":
+      return "album"
+    case "h":
+    case "help":
+      return "help"
+    default:
+      return command
+  }
 }
 
 exports.exist = exist
@@ -115,3 +137,4 @@ exports.shuffle = shuffle
 exports.parse_album_list = parse_album_list
 exports.remove_element_from_array = remove_element_from_array
 exports.filter = filter
+exports.formulate_command = formulate_command

@@ -1,3 +1,5 @@
+const { NUM_EMOJI } = require("./const")
+
 const create_queue = (message) => {
   class Queue {
     constructor(message) {
@@ -88,14 +90,37 @@ const parse_lrc = (lrc) => {
     }
   }
 
-  let prased = "```"
+  let parsed = "```"
   for (let i = 0; i < sanitized.length; i++) {
-    if (prased.length < 1990) {
-      prased += sanitized[i] + "\n"
+    if (parsed.length < 1985) {
+      parsed += sanitized[i] + "\n"
     }
   }
-  prased += "```"
-  return prased
+  parsed += "```"
+
+  return parsed
+}
+
+const parse_album_list = (list) => {
+  // `1) 黑梦 (窦唯, 1994) [10 songs]`
+
+  let msg = "```"
+
+  for (let i = 0; i < list.length; i++) {
+    let temp_date = new Date(list[i].date)
+    msg += `${i + 1})    ${list[i].name} (${
+      list[i].ar
+    }, ${temp_date.getFullYear()})`
+    msg += ` [${list[i].size} song${list[i].size > 1 ? "s" : ""}]\n`
+  }
+
+  msg += "```"
+
+  return msg
+}
+
+const filter = (reaction, user) => {
+  return NUM_EMOJI.includes(reaction.emoji.name)
 }
 
 exports.create_queue = create_queue
@@ -104,3 +129,5 @@ exports.validate_args = validate_args
 exports.display_track = display_track
 exports.formulate_command = formulate_command
 exports.parse_lrc = parse_lrc
+exports.parse_album_list = parse_album_list
+exports.filter = filter
