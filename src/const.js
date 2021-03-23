@@ -20,7 +20,10 @@ const NUM_EMOJI = [
   "🔟",
 ]
 
+const SUPPORTED_AUDIO_FORMAT = ["mp3", "flac", "ape", "aac", "ogg"]
+
 exports.PREFIX = PREFIX
 exports.NUM_EMOJI = NUM_EMOJI
 exports.EVENTS_DIR = EVENTS_DIR
 exports.COMMANDS_DIR = COMMANDS_DIR
+exports.SUPPORTED_AUDIO_FORMAT = SUPPORTED_AUDIO_FORMAT

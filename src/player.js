@@ -37,6 +37,15 @@ const play = async (message) => {
     console.log(url)
   }
 
+  if (curr_song.source === "uploaded_audio") {
+    console.log(curr_song.duration)
+    url = curr_song.url
+    play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
+      queue.track[queue.curr_pos].ar.name
+    })`
+    console.log(url)
+  }
+
   if (!!url) {
     queue.text_channel.send(play_message)
     dispatcher = queue.connection.play(url).on("finish", () => {

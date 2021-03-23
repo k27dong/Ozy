@@ -53,22 +53,20 @@ const display_track = (track) => {
 const formulate_command = (command) => {
   switch (command) {
     case "p":
-    case "play":
     case "playsong":
       return "play"
     case "q":
-    case "queue":
       return "queue"
     case "lyric":
-    case "lyrics":
       return "lyric"
     case "pa":
-    case "album":
     case "playalbum":
       return "album"
     case "h":
-    case "help":
       return "help"
+    case "f":
+    case "pf":
+      return "playfile"
     default:
       return command
   }
@@ -123,6 +121,39 @@ const filter = (reaction, user) => {
   return NUM_EMOJI.includes(reaction.emoji.name)
 }
 
+const parse_duration = (raw_duration) => {
+  let time = Number(raw_duration)
+  let parsed = ""
+
+  if (isNaN(time) || time < 0) {
+    return "00:00"
+  }
+
+  // 289.69795918367345 -> 04:50
+  let mins = ~~(time / 60)
+  let secs = ~~(time % 60)
+
+  parsed +=
+    "" + (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs
+  return parsed
+}
+
+const remove_element_from_array = (arr, e) => {
+  let sanitized_arr = []
+  let flag = false
+
+  for (let i = 0; i < arr.length; i++) {
+    if (_.isEqual(arr[i], e) && !flag) {
+      flag = true
+      continue
+    }
+
+    sanitized_arr.push(arr[i])
+  }
+
+  return sanitized_arr
+}
+
 exports.create_queue = create_queue
 exports.assert_queue = assert_queue
 exports.validate_args = validate_args
@@ -131,3 +162,5 @@ exports.formulate_command = formulate_command
 exports.parse_lrc = parse_lrc
 exports.parse_album_list = parse_album_list
 exports.filter = filter
+exports.parse_duration = parse_duration
+exports.remove_element_from_array = remove_element_from_array
