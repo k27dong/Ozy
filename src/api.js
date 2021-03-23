@@ -6,6 +6,8 @@ const {
   user_detail,
   user_playlist,
   album,
+  playlist_detail,
+  song_detail,
 } = require("NeteaseCloudMusicApi")
 
 /**
@@ -140,9 +142,96 @@ const set_user_by_id = async (id, channel) => {
   }
 }
 
-const set_user_by_exact_name = (name, channel) => {
-  // does this api even exist lmao
-  throw "Invalid args"
+const set_user_by_name = async (name) => {
+  let search_q = await cloudsearch({
+    keywords: name,
+    type: 1002,
+  })
+
+  assert_status_code(search_q)
+
+  if (!search_q.body.result.userprofiles) {
+    return null
+  }
+
+  let default_user = search_q.body.result.userprofiles[0]
+
+  return default_user
+}
+
+const get_user_playlist = async (id) => {
+  let playlist_q = await user_playlist({
+    uid: id,
+  })
+
+  playlist = []
+
+  if (!playlist_q.body.playlist.length === 0) {
+    return playlist
+  }
+
+  for (let p of playlist_q.body.playlist) {
+    if (p.creator.userId === id) {
+      playlist.push({
+        name: p.name,
+        id: p.id,
+        play_count: p.playCount,
+        count: p.trackCount,
+      })
+    }
+  }
+
+  return playlist
+}
+
+const get_songs_from_playlist = async (list) => {
+  let playlist_q = await playlist_detail({
+    id: list.id,
+  })
+
+  let raw_songs = []
+  let songs = []
+  let ids = ""
+
+  if (playlist_q.body.code === 404) {
+    return raw_songs
+  }
+
+  raw_songs = playlist_q.body.playlist.trackIds
+
+  for (let i = 0; i < raw_songs.length; i++) {
+    if (i === 0) {
+      ids += `${raw_songs[i].id}`
+    } else {
+      ids += `,${raw_songs[i].id}`
+    }
+  }
+
+  let songs_q = await song_detail({
+    ids: ids,
+  })
+
+  if (songs_q.body.songs.length === 0) {
+    return songs
+  }
+
+  for (let s of songs_q.body.songs) {
+    songs.push({
+      name: s.name,
+      id: s.id,
+      ar: {
+        name: s.ar[0].name,
+        id: s.ar[0].id,
+      },
+      al: {
+        name: s.al.name,
+        id: s.al.id,
+      },
+      source: "netease",
+    })
+  }
+
+  return songs
 }
 
 /**
@@ -289,9 +378,10 @@ exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
 exports.get_raw_lyric_by_id = get_raw_lyric_by_id
 exports.set_user_by_id = set_user_by_id
-exports.set_user_by_exact_name = set_user_by_exact_name
+exports.set_user_by_name = set_user_by_name
 exports.search_album = search_album
 exports.add_album = add_album
-
 exports.get_first_song_result = get_first_song_result
 exports.extract_album_songs = extract_album_songs
+exports.get_user_playlist = get_user_playlist
+exports.get_songs_from_playlist = get_songs_from_playlist
