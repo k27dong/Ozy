@@ -9,12 +9,17 @@ $ node index.js
 ```
 
 ### Commands
-```
-!start
-!pause
-!resume
-!stop
-!play
-!clear
-!help
-```
+- `!album keyword1 (keywords2) ...`
+- `!clear`
+- `!help`
+- `!lyric`
+- `!next`
+- `!pause`
+- `!ping`
+- `!play keyword1 (keywords2) ...`
+- `!playfile uploaded_file`
+- `!prev`
+- `!queue`
+- `!remove pos (pos2) (pos3-pos4)`
+- `!resume`
+- `!stop`

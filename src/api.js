@@ -25,6 +25,8 @@ const assert_status_code = (res) => {
  * @param {string} password
  */
 const login = async (phonenum, countrycode, password) => {
+  console.log(`Attempting to login ...`)
+
   let login_q = await login_cellphone({
     phone: phonenum,
     countrycode: countrycode,
@@ -32,10 +34,10 @@ const login = async (phonenum, countrycode, password) => {
   })
 
   if (login_q.body.code == 200) {
-    console.log(`Successfully logged in!`)
-    console.log(`Bot User: ${login_q.body.profile.nickname}`)
+    console.log(`logged in.`)
+    // console.log(`User: ${login_q.body.profile.nickname}`)
   } else {
-    console.log(`Default login error: code ${login_q.body.code}`)
+    console.log(`Default login error: code ${login_q.body.code}\n`)
   }
 }
 
@@ -166,7 +168,9 @@ const search_album = async (keywords) => {
   for (
     let i = 0;
     i <
-    (search_q.body.result.albumCount > 6 ? 6 : search_q.body.result.albumCount);
+    (search_q.body.result.albumCount > 10
+      ? 10
+      : search_q.body.result.albumCount);
     i++
   ) {
     let temp_obj = {
@@ -220,6 +224,66 @@ const add_album = async (al, track, channel) => {
   return track
 }
 
+const get_first_song_result = async (keywords) => {
+  let search_q = await cloudsearch({
+    keywords: keywords,
+  })
+
+  assert_status_code(search_q)
+
+  if (search_q.body.result.songCount === 0) {
+    return undefined
+  }
+
+  let raw_song = search_q.body.result.songs[0]
+
+  let new_song = {
+    name: raw_song.name,
+    id: raw_song.id,
+    ar: {
+      name: raw_song.ar[0].name,
+      id: raw_song.ar[0].id,
+    },
+    al: {
+      name: raw_song.al.name,
+      id: raw_song.al.id,
+    },
+    source: "netease",
+  }
+
+  return new_song
+}
+
+const extract_album_songs = async (al) => {
+  let album_q = await album({
+    id: al.id,
+  })
+
+  assert_status_code(album_q)
+
+  let result = album_q.body.songs
+  let new_songs = []
+
+  for (let i = 0; i < result.length; i++) {
+    let new_song = {
+      name: result[i].name,
+      id: result[i].id,
+      ar: {
+        name: result[i].ar[0].name,
+        id: result[i].ar[0].id,
+      },
+      al: {
+        name: result[i].al.name,
+        id: result[i].al.id,
+      },
+      source: "netease",
+    }
+    new_songs.push(new_song)
+  }
+
+  return new_songs
+}
+
 exports.login = login
 exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
@@ -228,3 +292,6 @@ exports.set_user_by_id = set_user_by_id
 exports.set_user_by_exact_name = set_user_by_exact_name
 exports.search_album = search_album
 exports.add_album = add_album
+
+exports.get_first_song_result = get_first_song_result
+exports.extract_album_songs = extract_album_songs
