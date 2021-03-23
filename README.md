@@ -18,8 +18,11 @@ $ node index.js
 - `!ping`
 - `!play keyword1 (keywords2) ...`
 - `!playfile uploaded_file`
+- `!playlist`
 - `!prev`
 - `!queue`
 - `!remove pos (pos2) (pos3-pos4)`
 - `!resume`
+- `!shuffle`
 - `!stop`
+- `!user username`
