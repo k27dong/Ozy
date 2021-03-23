@@ -23,8 +23,7 @@ module.exports = {
 
           message.channel.send(get_user_embed_msg(queue.user))
         }
-      }
-      else {
+      } else {
         throw `Invalid args`
       }
     } catch (err) {
