@@ -53,7 +53,12 @@ const play = async (message) => {
     })
   } else {
     console.log("url invalid")
-    queue.text_channel.send("Invalid song")
+
+    if (curr_song.source === "netease") {
+      queue.text_channel.send(`Invalid song: ${curr_song.name}`)
+    } else {
+      queue.text_channel.send("Invalid song")
+    }
     play_next(message)
   }
 }
@@ -77,6 +82,7 @@ const play_next = async (message) => {
     } else {
       queue.playing = false
       message.channel.send("End of queue.")
+      queue.curr_pos = -1
     }
   }
 }
