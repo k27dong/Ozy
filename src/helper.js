@@ -1,4 +1,5 @@
-const { NUM_EMOJI } = require("./const")
+const { MessageEmbed } = require("discord.js")
+const { NUM_EMOJI, REGEX_CHINESE } = require("./const")
 
 const create_queue = (message) => {
   class Queue {
@@ -10,7 +11,7 @@ const create_queue = (message) => {
       this.playing = false
       this.looping = false
       this.connection = null
-      this.curr_pos = -1
+      ;(this.curr_pos = -1), (this.user = null)
     }
   }
 
@@ -154,6 +155,103 @@ const remove_element_from_array = (arr, e) => {
   return sanitized_arr
 }
 
+const get_user_embed_msg = (user) => {
+  let user_msg = new MessageEmbed()
+    .setTitle(`User: ${user.nickname}`)
+    .setDescription(user.signature)
+    .setThumbnail(user.avatarUrl)
+    .setFooter(`${user.playlistCount} playlists`)
+
+  return user_msg
+}
+
+const parse_playlist_list = (list) => {
+  const fill_space = (i, name) => {
+    let spaces = ""
+
+    if (i >= 0) {
+      for (let j = 0; j < 3 - ~~Math.log10(i); j++) {
+        spaces += " "
+      }
+    } else {
+      let base = 28
+      let cn_count = 0
+      for (let j = 0; j < name.length; j++) {
+        if (REGEX_CHINESE.test(name[j])) {
+          cn_count++
+        }
+      }
+
+      base -= Math.round((cn_count * 5) / 3)
+      base -= name.length - cn_count
+
+      base = Math.max(base, 3)
+      for (let j = 0; j < base; j++) {
+        spaces += " "
+      }
+    }
+
+    return spaces
+  }
+
+  const trunc_name = (name) => {
+    let sanitized_name = ""
+
+    for (
+      let i = 0, actual_length = 0;
+      i < name.length && ~~actual_length <= 30;
+      i++
+    ) {
+      actual_length += REGEX_CHINESE.test(name[i]) ? 1.67 : 1
+      sanitized_name += name[i]
+    }
+
+    if (sanitized_name !== name) {
+      sanitized_name += "..."
+    }
+
+    return sanitized_name
+  }
+
+  let msg = "```"
+
+  for (let i = 0; i < list.length; i++) {
+    msg += `${i + 1})${fill_space(i + 1, "")}`
+    msg += `${trunc_name(list[i].name)}`
+    msg += `${fill_space(-1, list[i].name)}`
+    msg += `(${list[i].count})\n`
+  }
+
+  msg += "```"
+
+  return msg
+}
+
+const shuffle = (array) => {
+  var curr_index = array.length,
+    temp_value,
+    ran_index
+
+  // While there remain elements to shuffle...
+  while (0 !== curr_index) {
+    // Pick a remaining element...
+    ran_index = Math.floor(Math.random() * curr_index)
+    curr_index -= 1
+
+    // And swap it with the current element.
+    temp_value = array[curr_index]
+    array[curr_index] = array[ran_index]
+    array[ran_index] = temp_value
+  }
+
+  return array
+}
+
+// Used like so
+var arr = [2, 11, 37, 42]
+shuffle(arr)
+console.log(arr)
+
 exports.create_queue = create_queue
 exports.assert_queue = assert_queue
 exports.validate_args = validate_args
@@ -164,3 +262,6 @@ exports.parse_album_list = parse_album_list
 exports.filter = filter
 exports.parse_duration = parse_duration
 exports.remove_element_from_array = remove_element_from_array
+exports.get_user_embed_msg = get_user_embed_msg
+exports.parse_playlist_list = parse_playlist_list
+exports.shuffle = shuffle
