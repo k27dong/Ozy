@@ -68,6 +68,8 @@ const formulate_command = (command) => {
     case "f":
     case "pf":
       return "playfile"
+    case "j":
+      return "jump"
     default:
       return command
   }

@@ -10,7 +10,7 @@ const play = async (message) => {
     return
   }
 
-  if (!channel) {
+  if (!message.channel) {
     queue.playing = false
     message.channel.send(`You're not in a voice channel!`)
     return
