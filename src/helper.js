@@ -247,11 +247,6 @@ const shuffle = (array) => {
   return array
 }
 
-// Used like so
-var arr = [2, 11, 37, 42]
-shuffle(arr)
-console.log(arr)
-
 exports.create_queue = create_queue
 exports.assert_queue = assert_queue
 exports.validate_args = validate_args

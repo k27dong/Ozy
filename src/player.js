@@ -38,7 +38,6 @@ const play = async (message) => {
   }
 
   if (curr_song.source === "uploaded_audio") {
-    console.log(curr_song.duration)
     url = curr_song.url
     play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
       queue.track[queue.curr_pos].ar.name
