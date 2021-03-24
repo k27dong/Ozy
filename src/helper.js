@@ -289,12 +289,11 @@ const extract_host = (url) => {
 }
 
 const invalid_number = (num, low, high) => {
-  return (
-    isNaN(num) ||
-    !Number.isInteger(num) ||
-    num <= low ||
-    num >= high
-  )
+  return isNaN(num) || !Number.isInteger(num) || num <= low || num >= high
+}
+
+const reply_filter = (m, message) => {
+  return m.author.id === message.author.id
 }
 
 exports.create_queue = create_queue
@@ -314,3 +313,4 @@ exports.is_url = is_url
 exports.is_youtube = is_youtube
 exports.is_bilibili = is_bilibili
 exports.invalid_number = invalid_number
+exports.reply_filter = reply_filter
