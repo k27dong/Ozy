@@ -3,7 +3,6 @@ const {
   cloudsearch,
   song_url,
   lyric,
-  user_detail,
   user_playlist,
   album,
   playlist_detail,
@@ -44,44 +43,6 @@ const login = async (phonenum, countrycode, password) => {
 }
 
 /**
- * Search for a song and add the first result to the track
- * @param {Object[]} track list of songs to play
- * @param {string} keywords used to search in the server
- * @param {Object} channel discord channel for the message to be sent
- */
-const search_and_add = async (track, keywords, channel) => {
-  let search_q = await cloudsearch({
-    keywords: keywords,
-  })
-
-  assert_status_code(search_q)
-
-  if (search_q.body.result.songCount === 0) {
-    return track
-  }
-
-  let raw_song = search_q.body.result.songs[0]
-
-  let new_song = {
-    name: raw_song.name,
-    id: raw_song.id,
-    ar: {
-      name: raw_song.ar[0].name,
-      id: raw_song.ar[0].id,
-    },
-    al: {
-      name: raw_song.al.name,
-      id: raw_song.al.id,
-    },
-  }
-
-  channel.send(`**Queued**: ${new_song.name} (${new_song.ar.name})`)
-
-  track.push(new_song)
-  return track
-}
-
-/**
  * Get the url for a song by id
  * @param {number} id
  */
@@ -109,37 +70,6 @@ const get_raw_lyric_by_id = async (id) => {
   assert_status_code(lyric_q)
 
   return lyric_q.body.lrc.lyric
-}
-
-const set_user_by_id = async (id, channel) => {
-  let user_q = await user_detail({
-    uid: id,
-  })
-
-  let playlist_q = await user_playlist({
-    uid: id,
-  })
-
-  assert_status_code(user_q)
-  assert_status_code(playlist_q)
-
-  playlist = []
-
-  for (let p of playlist_q.body.playlist) {
-    playlist.push({
-      id: p.id,
-      name: p.name,
-      playCount: p.playCount,
-      trackCount: p.trackCount,
-    })
-  }
-
-  channel.send(`Selected user: ${user_q.body.profile.nickname}`)
-
-  return {
-    username: user_q.body.profile.nickname,
-    playlist: playlist,
-  }
 }
 
 const set_user_by_name = async (name) => {
@@ -277,42 +207,6 @@ const search_album = async (keywords) => {
   return result
 }
 
-/**
- * Add all songs from an album to the track
- * @param {Object} al info of an album
- * @param {Object[]} track list of songs to be played
- * @param {Object} channel discord channel for the message to be sent
- */
-const add_album = async (al, track, channel) => {
-  let album_q = await album({
-    id: al.id,
-  })
-
-  assert_status_code(album_q)
-
-  let result = album_q.body.songs
-
-  for (let i = 0; i < result.length; i++) {
-    let new_song = {
-      name: result[i].name,
-      id: result[i].id,
-      ar: {
-        name: result[i].ar[0].name,
-        id: result[i].ar[0].id,
-      },
-      al: {
-        name: result[i].al.name,
-        id: result[i].al.id,
-      },
-    }
-    track.push(new_song)
-  }
-
-  channel.send(`Queued all songs from ${al.name}`)
-
-  return track
-}
-
 const get_first_song_result = async (keywords) => {
   let search_q = await cloudsearch({
     keywords: keywords,
@@ -374,13 +268,10 @@ const extract_album_songs = async (al) => {
 }
 
 exports.login = login
-exports.search_and_add = search_and_add
 exports.get_song_url_by_id = get_song_url_by_id
 exports.get_raw_lyric_by_id = get_raw_lyric_by_id
-exports.set_user_by_id = set_user_by_id
 exports.set_user_by_name = set_user_by_name
 exports.search_album = search_album
-exports.add_album = add_album
 exports.get_first_song_result = get_first_song_result
 exports.extract_album_songs = extract_album_songs
 exports.get_user_playlist = get_user_playlist
