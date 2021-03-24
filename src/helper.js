@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js")
 const { NUM_EMOJI, REGEX_CHINESE } = require("./const")
+const psl = require("psl")
 
 const create_queue = (message) => {
   class Queue {
@@ -179,7 +180,7 @@ const parse_playlist_list = (list) => {
       let base = 28
       let cn_count = 0
       for (let j = 0; j < name.length; j++) {
-        if (REGEX_CHINESE.test(name[j])) {
+        if (!!REGEX_CHINESE.test(name[j])) {
           cn_count++
         }
       }
@@ -204,7 +205,7 @@ const parse_playlist_list = (list) => {
       i < name.length && ~~actual_length <= 30;
       i++
     ) {
-      actual_length += REGEX_CHINESE.test(name[i]) ? 1.67 : 1
+      actual_length += !!REGEX_CHINESE.test(name[i]) ? 1.67 : 1
       sanitized_name += name[i]
     }
 
@@ -234,19 +235,66 @@ const shuffle = (array) => {
     temp_value,
     ran_index
 
-  // While there remain elements to shuffle...
   while (0 !== curr_index) {
-    // Pick a remaining element...
     ran_index = Math.floor(Math.random() * curr_index)
     curr_index -= 1
 
-    // And swap it with the current element.
     temp_value = array[curr_index]
     array[curr_index] = array[ran_index]
     array[ran_index] = temp_value
   }
 
   return array
+}
+
+const is_url = (url) => {
+  var pattern = new RegExp(
+    "^(https?:\\/\\/)?" +
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +
+      "((\\d{1,3}\\.){3}\\d{1,3}))" +
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+      "(\\?[;&a-z\\d%_.~+=-]*)?" +
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
+  )
+
+  return !!pattern.test(url)
+}
+
+const is_youtube = (url) => {
+  let host = psl.get(extract_host(url))
+
+  return host.includes("youtube") || host.includes("youtu.be")
+}
+
+const is_bilibili = (url) => {
+  let host = psl.get(extract_host(url))
+
+  return host.includes("bilibili")
+}
+
+const extract_host = (url) => {
+  var hostname
+
+  if (url.indexOf("//") > -1) {
+    hostname = url.split("/")[2]
+  } else {
+    hostname = url.split("/")[0]
+  }
+
+  hostname = hostname.split(":")[0]
+  hostname = hostname.split("?")[0]
+
+  return hostname
+}
+
+const invalid_number = (num, low, high) => {
+  return (
+    isNaN(num) ||
+    !Number.isInteger(num) ||
+    num <= low ||
+    num >= high
+  )
 }
 
 exports.create_queue = create_queue
@@ -262,3 +310,7 @@ exports.remove_element_from_array = remove_element_from_array
 exports.get_user_embed_msg = get_user_embed_msg
 exports.parse_playlist_list = parse_playlist_list
 exports.shuffle = shuffle
+exports.is_url = is_url
+exports.is_youtube = is_youtube
+exports.is_bilibili = is_bilibili
+exports.invalid_number = invalid_number

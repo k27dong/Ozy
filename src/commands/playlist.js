@@ -1,4 +1,4 @@
-const { assert_queue, parse_playlist_list } = require("../helper")
+const { assert_queue, parse_playlist_list, invalid_number } = require("../helper")
 const { get_user_playlist, get_songs_from_playlist } = require("../api")
 const { play } = require("../player")
 
@@ -28,12 +28,7 @@ module.exports = {
             .then(async (collected) => {
               let selection = Number(collected.array()[0].content)
 
-              if (
-                isNaN(selection) ||
-                !Number.isInteger(selection) ||
-                selection <= 0 ||
-                selection > playlist.length
-              ) {
+              if (invalid_number(selection, 0, playlist.length + 1)) {
                 message.channel.send(`${selection} is not a valid selection`)
               }
 

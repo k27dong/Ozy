@@ -1,4 +1,4 @@
-const { assert_queue, validate_args } = require("../helper")
+const { assert_queue, invalid_number } = require("../helper")
 const { play } = require("../player")
 
 module.exports = {
@@ -11,18 +11,17 @@ module.exports = {
       let queue = assert_queue(message)
 
       if (args.length !== 1) {
+        throw "Invalid arguments"
       }
 
       let new_pos = Number(args[0])
-      if (
-        isNaN(new_pos) ||
-        !Number.isInteger(new_pos) ||
-        new_pos <= 0 ||
-        new_pos > queue.track.length
-      ) {
+
+      if (invalid_number(new_pos, 0, queue.track.length + 1)) {
         message.channel.send(`${new_pos} is not a valid index to jump to`)
         return
       }
+
+      if (queue.curr_pos === new_pos - 1) return
 
       queue.curr_pos = new_pos - 1
       queue.playing = true

@@ -1,4 +1,4 @@
-const { assert_queue } = require("../helper")
+const { assert_queue, invalid_number } = require("../helper")
 const { sortedUniq } = require("lodash")
 
 module.exports = {
@@ -10,13 +10,7 @@ module.exports = {
     const valid_index = (index, message) => {
       let queue = assert_queue(message)
 
-      let invalid =
-        isNaN(index) ||
-        !Number.isInteger(index) ||
-        index <= 0 ||
-        index > queue.track.length
-
-      if (invalid) {
+      if (invalid_number(index, 0, queue.track.length + 1)) {
         message.channel.send(`${index} is not a valid index!`)
       }
 
