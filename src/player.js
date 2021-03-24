@@ -18,11 +18,11 @@ const play = async (message) => {
 
   if (!queue.connection) {
     queue.connection = await channel.join()
-  }
 
-  queue.connection.on("disconnect", () => {
-    message.client.queue.delete(message.guild.id)
-  })
+    queue.connection.on("disconnect", () => {
+      message.client.queue.delete(message.guild.id)
+    })
+  }
 
   let curr_song = queue.track[queue.curr_pos]
 
