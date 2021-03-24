@@ -4,7 +4,7 @@ const {
   parse_album_list,
   filter,
 } = require("../helper")
-const { search_album, extract_album_songs } = require("../api")
+const { search_album, extract_album_songs } = require("../api/netease/api")
 const { NUM_EMOJI } = require("../const")
 const { play } = require("../player")
 

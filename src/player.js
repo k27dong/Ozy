@@ -1,5 +1,5 @@
 const { assert_queue } = require("./helper")
-const { get_song_url_by_id } = require("./api")
+const { get_song_url_by_id } = require("./api/netease/api")
 
 const play = async (message) => {
   let queue = assert_queue(message)

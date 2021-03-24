@@ -1,5 +1,5 @@
 const { assert_queue, parse_playlist_list, invalid_number } = require("../helper")
-const { get_user_playlist, get_songs_from_playlist } = require("../api")
+const { get_user_playlist, get_songs_from_playlist } = require("../api/netease/api")
 const { play } = require("../player")
 
 module.exports = {

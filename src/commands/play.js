@@ -1,5 +1,5 @@
-const { assert_queue, validate_args } = require("../helper")
-const { get_first_song_result } = require("../api")
+const { assert_queue, validate_args, is_url, is_youtube } = require("../helper")
+const { get_first_song_result } = require("../api/netease/api")
 const { play } = require("../player")
 
 module.exports = {
@@ -12,6 +12,14 @@ module.exports = {
     try {
       let queue = assert_queue(message)
       validate_args(args)
+
+      let method = "netease"
+
+      if (args.length === 1 && is_url(args[0])) {
+        if (is_youtube(args[0])) {
+          method = "youtube"
+        }
+      }
 
       let keywords = ""
       let play_message = ""

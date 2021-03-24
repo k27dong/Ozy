@@ -1,6 +1,6 @@
 const Discord = require("discord.js")
 const fs = require("fs")
-const { login } = require("./src/api")
+const { login } = require("./src/api/netease/api")
 const { EVENTS_DIR, COMMANDS_DIR } = require("./src/const")
 const CONFIG = require("./config.json")
 

@@ -1,5 +1,5 @@
 const { assert_queue, get_user_embed_msg } = require("../helper")
-const { set_user_by_name } = require("../api")
+const { set_user_by_name } = require("../api/netease/api")
 
 module.exports = {
   info: {

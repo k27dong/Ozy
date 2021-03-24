@@ -1,4 +1,4 @@
-const { get_raw_lyric_by_id } = require("../api")
+const { get_raw_lyric_by_id } = require("../api/netease/api")
 const { assert_queue, parse_lrc } = require("../helper")
 
 module.exports = {
