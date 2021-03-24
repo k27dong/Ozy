@@ -1,4 +1,4 @@
-const { assert_queue, display_track } = require("../helper")
+const { assert_queue, display_track, invalid_number } = require("../helper")
 
 module.exports = {
   info: {
@@ -13,12 +13,27 @@ module.exports = {
       // tries to back to {remain}, tries to future to {remain}
 
       let queue = assert_queue(message)
+
       let track = queue.track
       let displayed_tracks = []
       let pos = queue.curr_pos > 0 ? queue.curr_pos : 0
 
       let remain = 20
-      let back_amount = 8
+
+      if (args.length >= 1) {
+        if (args[0] === "full") {
+          // FIXME: this usually goes beyond 2000 characters
+          remain = queue.track.length
+        } else {
+          remain = Number(args[0])
+
+          if (invalid_number(remain, 0, queue.track.length + 1)) {
+            throw `${remain} is not a valid number`
+          }
+        }
+      }
+
+      let back_amount = ~~(remain * 0.4)
 
       if (track.length !== 0) {
         displayed_tracks.push({

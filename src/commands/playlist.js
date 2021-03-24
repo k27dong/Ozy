@@ -1,5 +1,13 @@
-const { assert_queue, parse_playlist_list, invalid_number } = require("../helper")
-const { get_user_playlist, get_songs_from_playlist } = require("../api/netease/api")
+const {
+  assert_queue,
+  parse_playlist_list,
+  invalid_number,
+  reply_filter,
+} = require("../helper")
+const {
+  get_user_playlist,
+  get_songs_from_playlist,
+} = require("../api/netease/api")
 const { play } = require("../player")
 
 module.exports = {
@@ -8,10 +16,6 @@ module.exports = {
   },
 
   run: async (client, message, args) => {
-    const reply_filter = (m, message) => {
-      return m.author.id === message.author.id
-    }
-
     try {
       let queue = assert_queue(message)
       if (!queue.user) {
@@ -29,7 +33,7 @@ module.exports = {
               let selection = Number(collected.array()[0].content)
 
               if (invalid_number(selection, 0, playlist.length + 1)) {
-                message.channel.send(`${selection} is not a valid selection`)
+                throw `${selection} is not a valid selection`
               }
 
               let selected_playlist = playlist[selection - 1]
