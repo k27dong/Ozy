@@ -2,6 +2,8 @@
 
 从网易云播放的discord机器人
 
+[Changelog | 更新日志](https://github.com/k27dong/Ozy/blob/main/CHANGELOG.md)
+
 ### Dev
 ```
 $ npm install
