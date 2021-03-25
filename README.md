@@ -14,16 +14,18 @@ $ node index.js
 - `!album keyword1 (keywords2) ...`
 - `!clear`
 - `!help`
+- `!jump pos`
 - `!lyric`
 - `!next`
 - `!pause`
 - `!ping`
 - `!play keyword1 (keywords2) ...`
+- `!play youtube_url`
 - `!playfile uploaded_file`
 - `!playlist`
 - `!prev`
-- `!queue`
-- `!remove pos (pos2) (pos3-pos4)`
+- `!queue (amount)`
+- `!remove pos (pos2) (pos3->pos4) ...`
 - `!resume`
 - `!shuffle`
 - `!stop`
