@@ -1,5 +1,6 @@
 const { assert_queue, validate_args, is_url, is_youtube } = require("../helper")
 const { get_first_song_result } = require("../api/netease/api")
+const { get_audio_from_raw_url } = require("../api/youtube/api")
 const { play } = require("../player")
 
 module.exports = {
@@ -14,24 +15,73 @@ module.exports = {
       validate_args(args)
 
       let method = "netease"
+      let keywords = ""
+      let play_message = ""
+      let song
+      let flag = false
 
       if (args.length === 1 && is_url(args[0])) {
         if (is_youtube(args[0])) {
-          method = "youtube"
+          method = "youtube_url"
+          keywords = args[0]
+        } else {
+          message.channel.send(`This format of url is not supported!`)
+          return
+        }
+      } else {
+        for (let word of args) {
+          if (word[0] === "-") {
+            if (!flag) {
+              word = word.slice(1, word.length)
+              switch (word) {
+                case "y":
+                case "y2b":
+                case "youtube":
+                  method = "youtube"
+                  break
+                case "n":
+                case "net":
+                case "netease":
+                  method = "netease"
+                  break
+                case "s":
+                case "spotify":
+                default:
+                  break
+              }
+            } else {
+              message.channel.send(`Cannot include more than one flag!`)
+              return
+            }
+          } else {
+            keywords += `${word} `
+          }
         }
       }
 
-      let keywords = ""
-      let play_message = ""
-      for (let word of args) {
-        keywords += `${word} `
+      switch (method) {
+        case "netease":
+          song = await get_first_song_result(keywords)
+          break
+        case "youtube_url":
+          song = await get_audio_from_raw_url(keywords)
+          break
+        case "youtube":
+          break
+        case "spotify":
+          break
+        case "b23":
+          break
+        default:
+          break // should never get here
       }
 
-      let song = await get_first_song_result(keywords)
       if (!!song) {
         queue.track.push(song)
-        if (song.source === "netease") {
-          play_message = `**Queued**: ${song.name} (${song.ar.name})`
+        if (song.source === "netease" || song.source === "youtube_url") {
+          play_message = `**Queued**: ${song.name} ${
+            !!song.ar.name ? `(${song.ar.name})` : ""
+          }`
         }
         message.channel.send(play_message)
       } else {

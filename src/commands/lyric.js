@@ -17,7 +17,7 @@ module.exports = {
           )
           message.channel.send(parse_lrc(raw_lrc))
         } else if (queue.track[queue.curr_pos].source === "uploaded_audio") {
-          // TODO: find something else
+          // TODO: find something else (maybe musixmatch)
         }
       }
     } catch (err) {

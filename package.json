@@ -1,7 +1,7 @@
 {
   "name": "ozy",
-  "version": "1.0.0",
-  "description": "discord bot",
+  "version": "2.0.1",
+  "description": "Discord bot embedded with NetEase Music Api (从网易云播放的discord机器人)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +24,7 @@
     "music-metadata": "^7.8.1",
     "NeteaseCloudMusicApi": "https://github.com/k27dong/NeteaseCloudMusicApi.git",
     "node-fetch": "^2.6.1",
-    "psl": "^1.8.0"
+    "psl": "^1.8.0",
+    "ytdl-core": "^4.5.0"
   }
 }

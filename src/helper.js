@@ -43,7 +43,9 @@ const display_track = (track) => {
   let queue = "```"
   for (let i = 0; i < track.length; i++) {
     let item = track[i].song
-    queue += `${track[i].pos + 1}) ${item.name} (${item.ar.name})`
+    queue += `${track[i].pos + 1}) ${item.name} ${
+      !!item.ar.name ? `(${item.ar.name})` : ""
+    }`
     queue += track[i].curr ? `   ◄———— \n` : `\n`
   }
 
