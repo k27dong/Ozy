@@ -3,6 +3,7 @@ const { get_song_url_by_id } = require("./api/netease/api")
 
 const play = async (message) => {
   let queue = assert_queue(message)
+  const cookie = message.client.cookie
   let channel = message.member.voice.channel
 
   if (queue.track.length === 0) {
@@ -30,7 +31,7 @@ const play = async (message) => {
   let play_message = ""
 
   if (curr_song.source === "netease") {
-    url = await get_song_url_by_id(curr_song.id)
+    url = await get_song_url_by_id(curr_song.id, cookie)
     play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
       queue.track[queue.curr_pos].ar.name
     })`

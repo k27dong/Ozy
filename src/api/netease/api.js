@@ -19,13 +19,17 @@ const assert_status_code = (res) => {
   }
 }
 
+const login = async (config) => {
+  return internal_login(config.PHONENUM, config.COUNTRYCODE, config.PASSWORD)
+}
+
 /**
  * login to an account
  * @param {number} phonenum phone number used to login
  * @param {number} countrycode
  * @param {string} password
  */
-const login = async (phonenum, countrycode, password) => {
+const internal_login = async (phonenum, countrycode, password) => {
   console.log(`Attempting to login ...`)
 
   let login_q = await login_cellphone({
@@ -36,6 +40,7 @@ const login = async (phonenum, countrycode, password) => {
 
   if (login_q.body.code == 200) {
     console.log(`logged in.`)
+    return login_q.body
     // console.log(`User: ${login_q.body.profile.nickname}`)
   } else {
     console.log(`Default login error: code ${login_q.body.code}\n`)
@@ -46,10 +51,15 @@ const login = async (phonenum, countrycode, password) => {
  * Get the url for a song by id
  * @param {number} id
  */
-const get_song_url_by_id = async (id) => {
+const get_song_url_by_id = async (id, cookie) => {
   let song_q = await song_url({
     id: id,
+    cookie: cookie,
   })
+
+  // FIXME: if song_q.body.data.code is -110, then it might
+  // indicate that this song is unpaid?
+  // console.log(song_q.body)
 
   assert_status_code(song_q)
 
@@ -120,8 +130,8 @@ const get_songs_from_playlist = async (list) => {
   })
 
   let raw_songs = []
+  let id_chunks = []
   let songs = []
-  let ids = ""
 
   if (playlist_q.body.code === 404) {
     return raw_songs
@@ -129,36 +139,45 @@ const get_songs_from_playlist = async (list) => {
 
   raw_songs = playlist_q.body.playlist.trackIds
 
-  for (let i = 0; i < raw_songs.length; i++) {
-    if (i === 0) {
-      ids += `${raw_songs[i].id}`
-    } else {
-      ids += `,${raw_songs[i].id}`
+  while (raw_songs.length > 0) {
+    id_chunks.push(raw_songs.splice(0, 999))
+  }
+
+  for (let temp = 0; temp < id_chunks.length; temp++) {
+    let curr_ids = id_chunks[temp]
+    let ids = ""
+
+    for (let i = 0; i < curr_ids.length; i++) {
+      if (i === 0) {
+        ids += `${curr_ids[i].id}`
+      } else {
+        ids += `,${curr_ids[i].id}`
+      }
     }
-  }
 
-  let songs_q = await song_detail({
-    ids: ids,
-  })
-
-  if (songs_q.body.songs.length === 0) {
-    return songs
-  }
-
-  for (let s of songs_q.body.songs) {
-    songs.push({
-      name: s.name,
-      id: s.id,
-      ar: {
-        name: s.ar[0].name,
-        id: s.ar[0].id,
-      },
-      al: {
-        name: s.al.name,
-        id: s.al.id,
-      },
-      source: "netease",
+    let songs_q = await song_detail({
+      ids: ids,
     })
+
+    if (!songs_q.body.songs || songs_q.body.songs.length === 0) {
+      return songs
+    }
+
+    for (let s of songs_q.body.songs) {
+      songs.push({
+        name: s.name,
+        id: s.id,
+        ar: {
+          name: s.ar[0].name,
+          id: s.ar[0].id,
+        },
+        al: {
+          name: s.al.name,
+          id: s.al.id,
+        },
+        source: "netease",
+      })
+    }
   }
 
   return songs

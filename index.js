@@ -8,8 +8,11 @@ const client = new Discord.Client()
 client.commands = new Discord.Collection()
 client.config = CONFIG
 client.queue = new Map()
+client.cookie = undefined
 
-login(CONFIG.PHONENUM, CONFIG.COUNTRYCODE, CONFIG.PASSWORD)
+login(CONFIG).then((result) => {
+  client.cookie = result.cookie
+})
 
 fs.readdir(`./src/${EVENTS_DIR}/`, (err, files) => {
   if (err) return console.error(err)
