@@ -83,7 +83,7 @@ module.exports = {
         }
       }
 
-      queue.text_channel.send(display_track(displayed_tracks))
+      message.channel.send(display_track(displayed_tracks))
     } catch (err) {
       console.error(err)
       message.channel.send(`Error (queue): ${err}`)

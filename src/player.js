@@ -51,7 +51,7 @@ const play = async (message) => {
   }
 
   if (!!url) {
-    queue.text_channel.send(play_message)
+    message.channel.send(play_message)
     dispatcher = queue.connection.play(url).on("finish", () => {
       play_next(message)
     })
@@ -59,9 +59,9 @@ const play = async (message) => {
     console.log("url invalid")
 
     if (curr_song.source === "netease") {
-      queue.text_channel.send(`Invalid song: ${curr_song.name}`)
+      message.channel.send(`Invalid song: ${curr_song.name}`)
     } else {
-      queue.text_channel.send("Invalid song")
+      message.channel.send("Invalid song")
     }
     play_next(message)
   }
