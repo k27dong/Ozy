@@ -26,7 +26,7 @@ const ALBUM = "```\
 Aliases: pa, playalbum \n\n\
 Search for an album \n\
 Reply to the returned message to select an album and add it to the track. \n\n\
-example: !pa go slow deca joins\
+example: !pa street legal dylan\
 ```"
 
 const CLEAR = "```\
