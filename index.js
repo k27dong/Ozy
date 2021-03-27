@@ -10,9 +10,11 @@ client.config = CONFIG
 client.queue = new Map()
 client.cookie = undefined
 
-login(CONFIG).then((result) => {
-  client.cookie = result.cookie
-})
+if (!!CONFIG.COUNTRYCODE && !!CONFIG.PASSWORD && !!CONFIG.PHONENUM) {
+  login(CONFIG).then((result) => {
+    client.cookie = result.cookie
+  })
+}
 
 fs.readdir(`./src/${EVENTS_DIR}/`, (err, files) => {
   if (err) return console.error(err)
