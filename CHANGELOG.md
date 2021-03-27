@@ -1,4 +1,6 @@
-# Change Log | 更新日志
+# 更新日志
+
+[English](https://github.com/k27dong/Ozy/blob/main/CHANGELOG_en.md)
 
 ### 2.0.3 | 20210327
 - 修改了README，增加了一个可以将ozy直接加入服务器的按钮
