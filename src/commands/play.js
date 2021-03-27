@@ -14,6 +14,11 @@ module.exports = {
       let queue = assert_queue(message)
       validate_args(args)
 
+      if (!message.member.voice.channel) {
+        message.channel.send(`You're not in any voice channel!`)
+        return
+      }
+
       let method = "netease"
       let keywords = ""
       let play_message = ""

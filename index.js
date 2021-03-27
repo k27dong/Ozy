@@ -32,9 +32,7 @@ fs.readdir(`./src/${COMMANDS_DIR}/`, (err, files) => {
 
     let props = require(`./src/${COMMANDS_DIR}/${file}`)
     let command_name = file.split(".")[0]
-    process.stdout.write(`Loading: ${command_name}`)
     client.commands.set(command_name, props)
-    console.log(`\t\t ... done`)
   })
 })
 

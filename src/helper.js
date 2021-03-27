@@ -72,7 +72,21 @@ const formulate_command = (command) => {
     case "pf":
       return "playfile"
     case "j":
+    case "goto":
       return "jump"
+    case "n":
+    case "skip":
+      return "next"
+    case "b":
+    case "back":
+      return "prev"
+    case "list":
+      return "playlist"
+    case "rm":
+      return "remove"
+    case "leave":
+    case "reset":
+      return "stop"
     default:
       return command
   }

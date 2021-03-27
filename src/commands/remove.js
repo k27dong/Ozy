@@ -39,6 +39,7 @@ module.exports = {
             }
           } else {
             message.channel.send(`${i} is not a valid index!`)
+            return
           }
         } else {
           let new_index = Number(i)

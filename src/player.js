@@ -35,7 +35,7 @@ const play = async (message) => {
     play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
       queue.track[queue.curr_pos].ar.name
     })`
-    console.log(url)
+    console.log(`${channel}:  ${url}`)
   }
 
   if (curr_song.source === "youtube_url") {
@@ -48,7 +48,7 @@ const play = async (message) => {
     play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
       queue.track[queue.curr_pos].ar.name
     })`
-    console.log(url)
+    console.log(`${channel}:  ${url}`)
   }
 
   if (!!url) {
