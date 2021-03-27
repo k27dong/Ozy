@@ -2,6 +2,8 @@
 
 从网易云播放的discord机器人
 
+[<img src="https://dabuttonfactory.com/button.png?t=Add+to+Discord&f=Open+Sans-Bold&ts=25&tc=fff&hp=45&vp=20&c=round&bgt=unicolored&bgc=feb010&ebgc=073763">](https://discord.com/api/oauth2/authorize?client_id=807336052347371570&permissions=8&scope=bot)
+
 [Changelog | 更新日志](https://github.com/k27dong/Ozy/blob/main/CHANGELOG.md)
 
 ### Dev
