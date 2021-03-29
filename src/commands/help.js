@@ -1,4 +1,4 @@
-const { FULL_COMMAND_LIST, HELP } = require("../help_msg")
+const { help } = require("../help_msg")
 const { formulate_command } = require("../helper")
 
 module.exports = {
@@ -9,14 +9,14 @@ module.exports = {
   run: async (client, message, args) => {
     try {
       if (args.length === 0) {
-        message.channel.send(FULL_COMMAND_LIST)
+        message.channel.send(help("help"))
       } else {
         let command = formulate_command(args[0])
 
-        if (!HELP[command]) {
+        if (!help(command)) {
           message.channel.send(`${command} is not a valid command!`)
         } else {
-          message.channel.send(HELP[command])
+          message.channel.send(help(command))
         }
       }
     } catch (err) {

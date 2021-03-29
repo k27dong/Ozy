@@ -1,6 +1,6 @@
 {
   "name": "ozy",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Discord bot embedded with NetEase Music Api (从网易云播放的discord机器人)",
   "main": "index.js",
   "scripts": {

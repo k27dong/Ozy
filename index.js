@@ -20,6 +20,8 @@ fs.readdir(`./src/${EVENTS_DIR}/`, (err, files) => {
   if (err) return console.error(err)
 
   files.forEach((file) => {
+    if (!file.endsWith(".js")) return
+
     const event = require(`./src/${EVENTS_DIR}/${file}`)
     let eventName = file.split(".")[0]
     client.on(eventName, event.bind(null, client))

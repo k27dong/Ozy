@@ -2,6 +2,10 @@
 
 [中文版](https://github.com/k27dong/Ozy/blob/main/CHANGELOG.md)
 
+### 2.1.0 | 20210328
+- Now the bot could be updated without restarting the entire service
+- Optimized the server which ozy is hosted on
+
 ### 2.0.3 | 20210327
 - Added a button in README to connect ozy to your server
 - Fixed a problem where user could still add songs even he/she's not in any voice channel

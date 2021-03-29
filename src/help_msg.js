@@ -1,4 +1,6 @@
-const FULL_COMMAND_LIST = "```\
+const help = (cmd) => {
+  const FULL_COMMAND_LIST =
+    "```\
 Full command list: \n\
 !album keyword1 (keywords2) ... \n\
 !clear \n\
@@ -21,7 +23,8 @@ Full command list: \n\
 use !help <command> to check detailed explaination \
 ```"
 
-const ALBUM = "```\
+  const ALBUM =
+    "```\
 !album [keyword] \n\
 Aliases: pa, playalbum \n\n\
 Search for an album \n\
@@ -29,30 +32,32 @@ Reply to the returned message to select an album and add it to the track. \n\n\
 example: !pa street legal dylan\
 ```"
 
-const CLEAR = "```\
+  const CLEAR = "```\
 !clear \n\n\
 Removes all songs from the list.\
 ```"
 
-const JUMP = "```\
+  const JUMP =
+    "```\
 !jump [position] \n\
 Aliases: j, goto \n\n\
 Jumps to a specified position in the track\n\n\
 example: !j 10\
 ```"
 
-const NEXT = "```\
+  const NEXT = "```\
 !next \n\
 Aliases: n, skip \n\n\
 Skips to the next song.\
 ```"
 
-const PAUSE = "```\
+  const PAUSE = "```\
 !pause \n\n\
 Pauses the song.\
 ```"
 
-const PLAY = "```\
+  const PLAY =
+    "```\
 !play [link or keywords] \n\
 Aliases: p \n\n\
 Search for the song in Netease and add the first result to the track \n\
@@ -62,26 +67,30 @@ example:\n\
   !p https://www.youtube.com/watch?v=DNvOajRSfZ8\
 ```"
 
-const PLAYFILE = "```\
+  const PLAYFILE =
+    "```\
 !playfile \n\
 Aliases: f, pf \n\n\
 Adds the attached file to the track.\
 ```"
 
-const PLAYLIST = "```\
+  const PLAYLIST =
+    "```\
 !playlist \n\
 Aliases: list \n\n\
 List all the playlist from the Netease user (set by using '!user') \n\
 Reply to the returned message to select a playlist and add it to the track. \n\n\
 ```"
 
-const PREV = "```\
+  const PREV =
+    "```\
 !prev \n\
 Aliases: b, back \n\n\
 Skips to the previous song.\
 ```"
 
-const QUEUE = "```\
+  const QUEUE =
+    "```\
 !queue [amount] \n\
 Aliases: q \n\n\
 Displays the queue\n\
@@ -91,7 +100,8 @@ example:\n\
   !q 30\
 ```"
 
-const REMOVE = "```\
+  const REMOVE =
+    "```\
 !remove [positions] \n\
 Aliases: rm \n\n\
 Removes the specified song(s) from the queue\n\n\
@@ -100,48 +110,51 @@ example:\n\
   !rm 4 8->10 (removes 4, 8, 9, 10)\
 ```"
 
-const RESUME = "```\
+  const RESUME = "```\
 !resume \n\n\
 Resumes the paused song.\
 ```"
 
-const SHUFFLE = "```\
+  const SHUFFLE = "```\
 !shuffle \n\n\
 Shuffles the remaining queue.\
 ```"
 
-const STOP = "```\
+  const STOP =
+    "```\
 !stop \n\
 Aliases: leave, reset \n\n\
 Clears the queue and leaves the voice channel\
 ```"
 
-const USER = "```\
+  const USER =
+    "```\
 !user [Netease username] \n\n\
 Sets the user for this bot\n\
-After user is set, use '!playlist' to display all the playlists created by this user.\n\n\
+After user is set, you can use '!playlist' to display all the playlists created by this user.\n\n\
 example: !user 麻辣烤鱼别放大葱\
 ```"
 
-const HELP = {
-  album: ALBUM,
-  clear: CLEAR,
-  jump: JUMP,
-  next: NEXT,
-  pause: PAUSE,
-  play: PLAY,
-  playfile: PLAYFILE,
-  playlist: PLAYLIST,
-  prev: PREV,
-  queue: QUEUE,
-  remove: REMOVE,
-  resume: RESUME,
-  shuffle: SHUFFLE,
-  stop: STOP,
-  user: USER,
-  help: FULL_COMMAND_LIST
+  const HELP = {
+    album: ALBUM,
+    clear: CLEAR,
+    jump: JUMP,
+    next: NEXT,
+    pause: PAUSE,
+    play: PLAY,
+    playfile: PLAYFILE,
+    playlist: PLAYLIST,
+    prev: PREV,
+    queue: QUEUE,
+    remove: REMOVE,
+    resume: RESUME,
+    shuffle: SHUFFLE,
+    stop: STOP,
+    user: USER,
+    help: FULL_COMMAND_LIST,
+  }
+
+  return HELP[cmd]
 }
 
-
-exports.FULL_COMMAND_LIST = FULL_COMMAND_LIST
-exports.HELP = HELP
+exports.help = help

@@ -11,7 +11,7 @@ const play = async (message) => {
     return
   }
 
-  if (!message.channel) {
+  if (!channel) {
     queue.playing = false
     message.channel.send(`You're not in a voice channel!`)
     return
@@ -35,7 +35,6 @@ const play = async (message) => {
     play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
       queue.track[queue.curr_pos].ar.name
     })`
-    console.log(`${channel}:  ${url}`)
   }
 
   if (curr_song.source === "youtube_url") {
@@ -48,7 +47,6 @@ const play = async (message) => {
     play_message = `Playing: ${queue.track[queue.curr_pos].name} (${
       queue.track[queue.curr_pos].ar.name
     })`
-    console.log(`${channel}:  ${url}`)
   }
 
   if (!!url) {
@@ -56,6 +54,8 @@ const play = async (message) => {
     dispatcher = queue.connection.play(url).on("finish", () => {
       play_next(message)
     })
+
+    console.log(`${channel.guild.name}|${channel.name}: ${url}`)
   } else {
     console.log("url invalid")
 
