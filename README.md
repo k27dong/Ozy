@@ -37,6 +37,4 @@ use `!help <command>` to check detailed explaination
 
 ### Support
 
-<br />
-
 <a href="https://www.buymeacoffee.com/kefan" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="200"></a>
