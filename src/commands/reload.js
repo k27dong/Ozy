@@ -43,7 +43,7 @@ module.exports = {
           files.forEach((file) => {
             if (!file.endsWith(".js")) return
 
-            const full_path = path.resolve(`./src/${file}`);
+            const full_path = path.resolve(`./src/${file}`)
             delete require.cache[full_path]
           })
         })
