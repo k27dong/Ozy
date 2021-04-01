@@ -6,7 +6,8 @@ module.exports = (client, message) => {
   if (
     message.mentions.has(client.user.id) &&
     !message.content.includes("@here") &&
-    !message.content.includes("@everyone")
+    !message.content.includes("@everyone") &&
+    message.content.startsWith("<@!")
   ) {
     message.channel.send(get_general_help_message())
   }
