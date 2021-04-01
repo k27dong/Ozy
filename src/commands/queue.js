@@ -22,7 +22,6 @@ module.exports = {
 
       if (args.length >= 1) {
         if (args[0] === "full") {
-          // FIXME: this usually goes beyond 2000 characters
           remain = queue.track.length
         } else {
           remain = Number(args[0])
@@ -33,7 +32,7 @@ module.exports = {
         }
       }
 
-      let back_amount = ~~(remain * 0.4)
+      let back_amount = ~~(remain * 0.3)
 
       if (track.length !== 0) {
         displayed_tracks.push({

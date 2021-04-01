@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js")
 const { NUM_EMOJI, REGEX_CHINESE } = require("./const")
+const { GENERAL_HELP_MESSAGE } = require("./help_msg")
 const psl = require("psl")
 
 const create_queue = (message) => {
@@ -41,12 +42,25 @@ const display_track = (track) => {
   }
 
   let queue = "```"
-  for (let i = 0; i < track.length; i++) {
+  let maxed = false
+  let i = 0
+
+  for (; i < track.length; i++) {
     let item = track[i].song
-    queue += `${track[i].pos + 1}) ${item.name} ${
+    let new_line = `${track[i].pos + 1}) ${item.name} ${
       !!item.ar.name ? `(${item.ar.name})` : ""
-    }`
-    queue += track[i].curr ? `   ◄———— \n` : `\n`
+    }${track[i].curr ? `   ◄———— \n` : `\n`}`
+
+    if (queue.length + new_line.length >= 1990) {
+      maxed = true
+      break
+    }
+
+    queue += new_line
+  }
+
+  if (maxed) {
+    queue += `${track[i].pos + 1}) ...`
   }
 
   queue += "```"
@@ -312,6 +326,14 @@ const reply_filter = (m, message) => {
   return m.author.id === message.author.id
 }
 
+const get_general_help_message = () => {
+  let help_message = new MessageEmbed()
+    .setColor("#2C2F33")
+    .setDescription(GENERAL_HELP_MESSAGE)
+
+  return help_message
+}
+
 exports.create_queue = create_queue
 exports.assert_queue = assert_queue
 exports.validate_args = validate_args
@@ -330,3 +352,4 @@ exports.is_youtube = is_youtube
 exports.is_bilibili = is_bilibili
 exports.invalid_number = invalid_number
 exports.reply_filter = reply_filter
+exports.get_general_help_message = get_general_help_message

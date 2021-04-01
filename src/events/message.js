@@ -1,7 +1,16 @@
-const { formulate_command } = require("../helper")
+const { formulate_command, get_general_help_message } = require("../helper")
 
 module.exports = (client, message) => {
   if (message.author.bot) return
+
+  if (
+    message.mentions.has(client.user.id) &&
+    !message.content.includes("@here") &&
+    !message.content.includes("@everyone")
+  ) {
+    message.channel.send(get_general_help_message())
+  }
+
   if (message.content.indexOf(client.config.PREFIX) !== 0) return
 
   const args = message.content

@@ -206,9 +206,9 @@ const search_album = async (keywords) => {
   for (
     let i = 0;
     i <
-    (search_q.body.result.albumCount > 10
+    (search_q.body.result.albums.length > 10
       ? 10
-      : search_q.body.result.albumCount);
+      : search_q.body.result.albums.length);
     i++
   ) {
     let temp_obj = {

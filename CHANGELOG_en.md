@@ -2,6 +2,14 @@
 
 [中文版](https://github.com/k27dong/Ozy/blob/main/CHANGELOG.md)
 
+### 2.1.1 | 20210331
+- Changed the prefix from `!` to `*`, since the former is used by Rythm, another famous music bot
+- Set status for the bot
+- Fixed a bug where the resulting playlist could not be displayed due to an error from the Netease API
+- The default front and back ratio when displaying track is reduced from `0.4` to `0.3`
+- Fixed a problem where the length of the displayed track sometime goes beyond the limit of a single discord message (2000)
+- Added `full` flag for the `queue` command
+
 ### 2.1.0 | 20210328
 - Now the bot could be updated without restarting the entire service
 - Optimized the server which ozy is hosted on
