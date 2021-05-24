@@ -13,28 +13,24 @@ $ node index.js
 ```
 
 ### Commands
-- `!album keyword1 (keywords2) ...`
-- `!clear`
-- `!help`
-- `!jump pos`
-- `!lyric`
-- `!next`
-- `!pause`
-- `!ping`
-- `!play keyword1 (keywords2) ...`
-- `!play youtube_url`
-- `!playfile uploaded_file`
-- `!playlist`
-- `!prev`
-- `!queue (amount)`
-- `!remove pos (pos2) (pos3->pos4) ...`
-- `!resume`
-- `!shuffle`
-- `!stop`
-- `!user username`
+- `*album keyword1 (keywords2) ...`
+- `*clear`
+- `*help`
+- `*jump pos`
+- `*lyric`
+- `*next`
+- `*pause`
+- `*ping`
+- `*play keyword1 (keywords2) ...`
+- `*play youtube_url`
+- `*playfile uploaded_file`
+- `*playlist`
+- `*prev`
+- `*queue (amount)`
+- `*remove pos (pos2) (pos3->pos4) ...`
+- `*resume`
+- `*shuffle`
+- `*stop`
+- `*user username`
 
-use `!help <command>` to check detailed explaination
-
-### Support
-
-<a href="https://www.buymeacoffee.com/kefan" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="200"></a>
+use `*help` or `*help <command>` to check detailed explaination
