@@ -2,7 +2,14 @@ const Discord = require("discord.js")
 const fs = require("fs")
 const { login } = require("./src/api/netease/api")
 const { EVENTS_DIR, COMMANDS_DIR } = require("./src/const")
-const CONFIG = require("./config.json")
+// const CONFIG = require("./config.json")
+
+const CONFIG = {
+  COUNTRYCODE: process.env.countrycode,
+  PASSWORD: process.env.password,
+  PHONENUM: process.env.phonenum,
+  BOT_TOKEN: process.env.bot_token
+}
 
 const client = new Discord.Client()
 client.commands = new Discord.Collection()
