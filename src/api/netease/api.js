@@ -40,8 +40,8 @@ const internal_login = async (phonenum, countrycode, password) => {
 
   if (login_q.body.code == 200) {
     console.log(`logged in.`)
+    console.log(`User: ${login_q.body.profile.nickname}`)
     return login_q.body
-    // console.log(`User: ${login_q.body.profile.nickname}`)
   } else {
     console.log(`Default login error: code ${login_q.body.code}\n`)
   }
