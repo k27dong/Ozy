@@ -14,7 +14,7 @@ module.exports = {
         message.channel.send(`${index} is not a valid index!`)
       }
 
-      return !invalid
+      return !invalid_number(index, 0, queue.track.length + 1)
     }
 
     try {
@@ -22,6 +22,7 @@ module.exports = {
 
       let removing_index = []
       for (let i of args) {
+        // if there are more than one indexs to be removed (ex: 1 -> 10)
         if (i.replace(/[^\->]/g, "").length === 2) {
           let new_index = i.split("->")
           if (new_index.length === 2) {
