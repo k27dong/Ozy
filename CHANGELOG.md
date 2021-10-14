@@ -2,6 +2,10 @@
 
 [English](https://github.com/k27dong/Ozy/blob/main/CHANGELOG_en.md)
 
+### 2.1.2 | 20211014
+- 服务器用从GCP改为Heroku
+- 修复了`remove`中的一个bug
+
 ### 2.1.1 | 20210331
 - 用`*`代替了`!`作为前缀
 - 当上线时自动设置状态栏

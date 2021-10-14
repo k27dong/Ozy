@@ -2,6 +2,10 @@
 
 [中文版](https://github.com/k27dong/Ozy/blob/main/CHANGELOG.md)
 
+### 2.1.2 | 20211014
+- Changed hosting from GCP to Heroku
+- Fixed a bug in the `remove` command
+
 ### 2.1.1 | 20210331
 - Changed the prefix from `!` to `*`, since the former is used by Rythm, another famous music bot
 - Set status for the bot
