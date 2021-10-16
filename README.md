@@ -6,11 +6,7 @@
 
 [Changelog](https://github.com/k27dong/Ozy/blob/main/CHANGELOG_en.md) | [更新日志](https://github.com/k27dong/Ozy/blob/main/CHANGELOG.md)
 
-### Dev
-```
-$ npm install
-$ node index.js
-```
+Questions / Bugs / Feature requrests: [Official Server](https://discord.gg/p6F32GejZT)
 
 ### Commands
 - `*album keyword1 (keywords2) ...`
@@ -34,3 +30,9 @@ $ node index.js
 - `*user username`
 
 use `*help` or `*help <command>` to check detailed explaination
+
+### Development
+```
+$ npm install
+$ node index.js
+```
