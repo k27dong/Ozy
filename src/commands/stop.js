@@ -10,7 +10,10 @@ module.exports = {
       let queue = assert_queue(message)
 
       if (!queue.connection) return
-      if (!queue.connection.dispatcher) return
+
+      if (!!queue.connection.dispatcher) {
+        queue.connection.dispatcher.end()
+      }
 
       queue.connection.dispatcher.end()
       message.guild.me.voice.channel.leave()
