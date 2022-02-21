@@ -1,36 +1,35 @@
-const { assert_queue, display_track, invalid_number } = require("../helper")
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { assert_channel_play_queue, display_track } = require('../helper');
 
 module.exports = {
-  info: {
-    name: "queue",
-    description: "q",
-  },
-
-  run: async (client, message, args) => {
+	data: new SlashCommandBuilder()
+		.setName('queue')
+		.setDescription('显示播放队列')
+    .addIntegerOption(option =>
+      option.setName('队列数量')
+        .setDescription('显示队列数量')
+        .setRequired(false)),
+	async execute(interaction) {
     try {
-      // add current pos
-      // go back at most {back_amount}, go front at most {remain - 1 - back_amount}
-      // tries to back to {remain}, tries to future to {remain}
-
-      let queue = assert_queue(message)
+      let queue = assert_channel_play_queue(interaction)
 
       let track = queue.track
       let displayed_tracks = []
-      let pos = queue.curr_pos > 0 ? queue.curr_pos : 0
+      let pos = queue.position > 0 ? queue.position : 0
 
       let remain = 20
 
-      if (args.length >= 1) {
-        if (args[0] === "full") {
-          remain = queue.track.length
-        } else {
-          remain = Number(args[0])
+      // if (args.length >= 1) {
+      //   if (args[0] === "full") {
+      //     remain = queue.track.length
+      //   } else {
+      //     remain = Number(args[0])
 
-          if (invalid_number(remain, 0, queue.track.length + 1)) {
-            throw `${remain} is not a valid number`
-          }
-        }
-      }
+      //     if (invalid_number(remain, 0, queue.track.length + 1)) {
+      //       throw `${remain} is not a valid number`
+      //     }
+      //   }
+      // }
 
       let back_amount = ~~(remain * 0.3)
 
@@ -82,10 +81,10 @@ module.exports = {
         }
       }
 
-      message.channel.send(display_track(displayed_tracks))
+      await interaction.reply(display_track(displayed_tracks))
     } catch (err) {
-      console.error(err)
-      message.channel.send(`Error (queue): ${err}`)
+      console.log(err)
+      await interaction.reply(`Error @ \`${interaction.commandName}\`: ${err}`);
     }
-  },
-}
+	},
+};

@@ -1,11 +1,11 @@
 {
   "name": "ozy",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Discord bot embedded with NetEase Music Api (从网易云播放的discord机器人)",
   "main": "index.js",
   "engines": {
-    "node": "12.21.0",
-    "npm": "7.5.2"
+    "node": "16.13.2",
+    "npm": "8.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,14 +22,12 @@
   },
   "homepage": "https://github.com/k27dong/discord-bot#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.4.0",
-    "discord.js": "^12.5.1",
-    "ffmpeg-static": "^4.2.7",
-    "lodash": "^4.17.21",
-    "music-metadata": "^7.8.1",
-    "NeteaseCloudMusicApi": "git+https://github.com/k27dong/NeteaseCloudMusicApi.git",
-    "node-fetch": "^2.6.1",
-    "psl": "^1.8.0",
-    "ytdl-core": "^4.5.0"
+    "@discordjs/builders": "^0.12.0",
+    "@discordjs/rest": "^0.3.0",
+    "@discordjs/voice": "^0.8.0",
+    "discord-api-types": "^0.27.2",
+    "discord.js": "^13.6.0",
+    "libsodium-wrappers": "^0.7.9",
+    "NeteaseCloudMusicApi": "git+https://github.com/k27dong/NeteaseCloudMusicApi.git"
   }
 }

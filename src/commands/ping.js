@@ -1,15 +1,15 @@
-module.exports = {
-  info: {
-    name: "ping",
-    description: "ping pong",
-  },
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
-  run: (client, message, args) => {
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('ping')
+		.setDescription('Replies with Pong!'),
+	async execute(interaction) {
     try {
-      message.channel.send("pong!")
+      await interaction.reply('Pong!');
     } catch (err) {
-      console.error(err)
-      message.channel.send(`Error (ping): ${err}`)
+      console.log(err)
+      await interaction.reply(`Error @ \`${interaction.commandName}\`: ${err}`);
     }
-  },
-}
+	},
+};

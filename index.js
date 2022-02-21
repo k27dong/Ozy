@@ -1,53 +1,44 @@
-const Discord = require("discord.js")
+const { token, dev_guild } = require("./config.json")
 const fs = require("fs")
-const { login } = require("./src/api/netease/api")
-const { EVENTS_DIR, COMMANDS_DIR } = require("./src/const")
-// const CONFIG = require("./config.json")
+const { Client, Collection, Intents } = require("discord.js")
 
-const CONFIG = {
-  COUNTRYCODE: process.env.countrycode,
-  PASSWORD: process.env.password,
-  PHONENUM: process.env.phonenum,
-  BOT_TOKEN: process.env.bot_token,
-  PREFIX: process.env.prefix
-}
 
-const client = new Discord.Client()
-client.commands = new Discord.Collection()
-client.config = CONFIG
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
+});
+
+client.commands = new Collection()
 client.queue = new Map()
-client.cookie = undefined
 
-if (!!CONFIG.COUNTRYCODE && !!CONFIG.PASSWORD && !!CONFIG.PHONENUM) {
-  login(CONFIG).then((result) => {
-    client.cookie = result.cookie
-  })
+/** refresh command list  */
+const guild = client.guilds.cache.get(dev_guild)
+client.commands.set([])
+if (!!guild) guild.commands.set([])
+
+const command_files = fs
+  .readdirSync("./src/commands")
+  .filter((f) => f.endsWith(".js"))
+
+const event_files = fs
+  .readdirSync("./src/events")
+  .filter((f) => f.endsWith(".js"))
+
+for (const f of command_files) {
+  const command = require(`./src/commands/${f}`)
+  client.commands.set(command.data.name, command)
+
+  console.log(command.data.name)
 }
 
-fs.readdir(`./src/${EVENTS_DIR}/`, (err, files) => {
-  if (err) return console.error(err)
+for (const f of event_files) {
+  const event = require(`./src/events/${f}`)
 
-  files.forEach((file) => {
-    if (!file.endsWith(".js")) return
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args))
+  } else {
+    client.on(event.name, (...args) => event.execute(...args))
+  }
 
-    const event = require(`./src/${EVENTS_DIR}/${file}`)
-    let eventName = file.split(".")[0]
-    console.log(`loading event: ${eventName}`)
-    client.on(eventName, event.bind(null, client))
-  })
-})
+}
 
-fs.readdir(`./src/${COMMANDS_DIR}/`, (err, files) => {
-  if (err) return console.error(err)
-
-  files.forEach((file) => {
-    if (!file.endsWith(".js")) return
-
-    let props = require(`./src/${COMMANDS_DIR}/${file}`)
-    let command_name = file.split(".")[0]
-    console.log(`loading command: ${command_name}`)
-    client.commands.set(command_name, props)
-  })
-})
-
-client.login(CONFIG.BOT_TOKEN)
+client.login(token)
