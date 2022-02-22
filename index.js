@@ -2,10 +2,9 @@ const { token, dev_guild } = require("./config.json")
 const fs = require("fs")
 const { Client, Collection, Intents } = require("discord.js")
 
-
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
-});
+})
 
 client.commands = new Collection()
 client.queue = new Map()
@@ -38,7 +37,6 @@ for (const f of event_files) {
   } else {
     client.on(event.name, (...args) => event.execute(...args))
   }
-
 }
 
 client.login(token)

@@ -1,15 +1,17 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { assert_channel_play_queue, display_track } = require('../helper');
+const { SlashCommandBuilder } = require("@discordjs/builders")
+const { assert_channel_play_queue, display_track } = require("../helper")
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('queue')
-		.setDescription('显示播放队列')
-    .addIntegerOption(option =>
-      option.setName('队列数量')
-        .setDescription('显示队列数量')
-        .setRequired(false)),
-	async execute(interaction) {
+  data: new SlashCommandBuilder()
+    .setName("queue")
+    .setDescription("显示播放队列")
+    .addIntegerOption((option) =>
+      option
+        .setName("队列数量")
+        .setDescription("显示队列数量")
+        .setRequired(false)
+    ),
+  async execute(interaction) {
     try {
       let queue = assert_channel_play_queue(interaction)
 
@@ -84,7 +86,7 @@ module.exports = {
       await interaction.reply(display_track(displayed_tracks))
     } catch (err) {
       console.log(err)
-      await interaction.reply(`Error @ \`${interaction.commandName}\`: ${err}`);
+      await interaction.reply(`Error @ \`${interaction.commandName}\`: ${err}`)
     }
-	},
-};
+  },
+}

@@ -1,26 +1,25 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { search_song } = require('../api/netease/search_song');
-const { populate_info, assert_channel_play_queue } = require('../helper');
-const {play} = require("../player")
+const { SlashCommandBuilder } = require("@discordjs/builders")
+const { search_song } = require("../api/netease/search_song")
+const { populate_info, assert_channel_play_queue } = require("../helper")
+const { play } = require("../player")
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('play')
-		.setDescription('play something')
-    .addStringOption(option =>
-      option.setName('搜索')
-        .setDescription('搜索音乐')
-        .setRequired(true)),
-	async execute(interaction) {
-    let tunnel = "netease"  // for now only netease is supported
+  data: new SlashCommandBuilder()
+    .setName("play")
+    .setDescription("play something")
+    .addStringOption((option) =>
+      option.setName("搜索").setDescription("搜索音乐").setRequired(true)
+    ),
+  async execute(interaction) {
+    let tunnel = "netease" // for now only netease is supported
 
-		try {
-      const info = populate_info(interaction);
+    try {
+      const info = populate_info(interaction)
 
       if (!info.voice_channel_id) throw "you must be in a voice channel!"
 
       let queue = assert_channel_play_queue(interaction)
-      const song_search_keywords = interaction.options.getString('搜索')
+      const song_search_keywords = interaction.options.getString("搜索")
       const query_result = await search_song(song_search_keywords)
 
       if (query_result.length == 0) throw "can't find any result"
@@ -33,7 +32,9 @@ module.exports = {
           !!song.ar.name ? `(${song.ar.name})` : ""
         }`
       }
-      await interaction.reply(play_message);
+      await interaction.reply(play_message)
+
+      console.log(queue.track)
 
       if (!queue.playing) {
         queue.playing = true
@@ -42,7 +43,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err)
-      await interaction.reply(`Error @ \`${interaction.commandName}\`: ${err}`);
+      await interaction.reply(`Error @ \`${interaction.commandName}\`: ${err}`)
     }
-	},
-};
+  },
+}

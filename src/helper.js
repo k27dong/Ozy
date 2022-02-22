@@ -10,10 +10,12 @@ const populate_info = (interaction) => {
     server_id: interaction.guildId,
     user_id: interaction.member.user.id,
     text_channel_id: interaction.channelId,
-    voice_channel_id: interaction.guild.members.cache.get(interaction.member.user.id).voice.channelId
+    voice_channel_id: interaction.guild.members.cache.get(
+      interaction.member.user.id
+    ).voice.channelId,
   }
 
-  return info;
+  return info
 }
 
 /**
@@ -33,11 +35,12 @@ const create_queue = (interaction) => {
     playing: false,
     looping: false,
     connection: null,
+    player: null,
     user: null,
-    position: -1
+    position: -1,
   }
 
-  interaction.client.queue.set(interaction.guildId, queue);
+  interaction.client.queue.set(interaction.guildId, queue)
 }
 
 const assert_channel_play_queue = (interaction) => {
@@ -80,12 +83,41 @@ const display_track = (track) => {
   return queue
 }
 
+const parse_lrc = (lrc) => {
+  if (typeof lrc === "undefined") {
+    return "```No lyrics available```"
+  }
+
+  let sanitized = lrc.split("\n")
+  for (let i = 0; i < sanitized.length; i++) {
+    let l = sanitized[i]
+    try {
+      if (l.length >= 0 && l[0] == "[") {
+        sanitized[i] = sanitized[i].slice(sanitized[i].indexOf("]") + 1)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  let parsed = "```"
+  for (let i = 0; i < sanitized.length; i++) {
+    if (parsed.length < 1985) {
+      parsed += sanitized[i] + "\n"
+    }
+  }
+  parsed += "```"
+
+  return parsed
+}
+
 const send_msg_to_text_channel = (interaction, content) => {
   interaction.client.channels.cache.get(interaction.channelId).send(content)
 }
 
 exports.populate_info = populate_info
-exports.assert_query_res =assert_query_res
+exports.assert_query_res = assert_query_res
 exports.assert_channel_play_queue = assert_channel_play_queue
 exports.display_track = display_track
 exports.send_msg_to_text_channel = send_msg_to_text_channel
+exports.parse_lrc = parse_lrc
