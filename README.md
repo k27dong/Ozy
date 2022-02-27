@@ -1,4 +1,9 @@
-# Ozy
+# Ozy (V13)
+
+WIP
+![demo1](https://user-images.githubusercontent.com/46537987/155899000-11f8463b-1f19-4a3a-9c84-425cc5e3fc96.gif)
+
+---
 
 从网易云播放的discord机器人
 
@@ -8,26 +13,20 @@
 
 Questions / Bugs / Feature requrests: [Official Server](https://discord.gg/p6F32GejZT)
 
-### Commands
-- `*album keyword1 (keywords2) ...`
-- `*clear`
-- `*help`
-- `*jump pos`
-- `*lyric`
-- `*next`
-- `*pause`
-- `*ping`
-- `*play keyword1 (keywords2) ...`
-- `*play youtube_url`
-- `*playfile uploaded_file`
-- `*playlist`
-- `*prev`
-- `*queue (amount)`
-- `*remove pos (pos2) (pos3->pos4) ...`
-- `*resume`
-- `*shuffle`
-- `*stop`
-- `*user username`
+## Demo
+
+### Commands (using V13😍)!
+- `/album`
+- `/clear`
+- `/jump`
+- `/lyric`
+- `/play`
+- `/queue`
+- `/skip`
+- to be continued
+
+
+
 
 use `*help` or `*help <command>` to check detailed explaination
 
