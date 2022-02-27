@@ -37,7 +37,7 @@ const play = async (interaction) => {
           : queue.position + 1
 
         let resource = await next_resource(interaction)
-        queue.player.play(resource)
+        if (!!resource) queue.player.play(resource)
       }
     })
   }
@@ -53,7 +53,7 @@ const play = async (interaction) => {
   }
 
   let resource = await next_resource(interaction)
-  queue.player.play(resource)
+  if (!!resource) queue.player.play(resource)
 }
 
 const next_resource = async (interaction) => {
@@ -100,7 +100,7 @@ const next_resource = async (interaction) => {
       queue.playing = false
       send_msg_to_text_channel(interaction, `End of queue.`)
       queue.position = -1
-      return
+      return null
     } else {
       queue.position = queue.looping
         ? (queue.position + 1) % queue.track.length

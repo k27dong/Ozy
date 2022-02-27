@@ -61,7 +61,7 @@ module.exports = {
         .awaitMessageComponent({
           filter,
           componentType: "SELECT_MENU",
-          time: 60000,
+          time: 20000, // 20 sec
         })
         .then(async (res) => {
           const album = query_result[res.values[0]]
@@ -87,8 +87,11 @@ module.exports = {
           }
         })
         .catch((err) => {
-          console.log(`No interactions were collected.`)
           console.log(err)
+          interaction.editReply({
+            content: `No interactions were collected.`,
+            components: [],
+          })
         })
     } catch (err) {
       console.log(err)
