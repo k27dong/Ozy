@@ -7,15 +7,12 @@ const get_song_url_by_id = async (id, cookie) => {
     cookie: cookie,
   })
 
-  // FIXME: if song_q.body.data.code is -110, then it might
-  // indicate that this song is unpaid?
-  // console.log(song_q.body)
-
   assert_query_res(song_q)
 
   let url = song_q.body.data[0].url
+  let err_code = song_q.body.data[0].code
 
-  return url
+  return [url, err_code]
 }
 
 exports.get_song_url_by_id = get_song_url_by_id

@@ -10,6 +10,7 @@ const {
   AudioPlayerStatus,
 } = require("@discordjs/voice")
 const { get_song_url_by_id } = require("./api/netease/get_song_url_by_id")
+const { API_OK, ERR_UNPAID, ERR_COPYRIGHT } = require("./common")
 
 const play = async (interaction) => {
   let queue = assert_channel_play_queue(interaction)
@@ -65,12 +66,12 @@ const next_resource = async (interaction) => {
     queue.player.stop()
   }
 
-  let url
+  let url, err_code
   let play_message = ""
   let curr_song = queue.track[queue.position]
 
   if (curr_song.source === "netease") {
-    url = await get_song_url_by_id(curr_song.id, cookie)
+    [url, err_code] = await get_song_url_by_id(curr_song.id, cookie)
     play_message = `Playing: ${queue.track[queue.position].name} (${
       queue.track[queue.position].ar.name
     })`
@@ -81,17 +82,27 @@ const next_resource = async (interaction) => {
     )
   }
 
-  if (!!url) {
+  if (err_code === API_OK) {
     send_msg_to_text_channel(interaction, play_message)
     console.log(url)
 
     // url = "https://download.samplelib.com/mp3/sample-3s.mp3"
     return createAudioResource(url)
   } else {
-    console.log("url invalid")
+    console.log("url invalid: ", err_code)
 
     if (curr_song.source === "netease") {
-      send_msg_to_text_channel(interaction, `Invalid song: ${curr_song.name}`)
+      let invalid_reason =
+        err_code === ERR_UNPAID
+          ? "付费歌曲"
+          : err_code === ERR_COPYRIGHT
+          ? "无版权"
+          : "未知错误"
+
+      send_msg_to_text_channel(
+        interaction,
+        `Invalid song: ${curr_song.name} (${invalid_reason})`
+      )
     } else {
       send_msg_to_text_channel(interaction, "Invalid song")
     }

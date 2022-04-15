@@ -11,6 +11,8 @@ const search_song = async (keywords) => {
   const query = search_q.body.result.songs
   const res = []
 
+  if (!query) return
+
   for (let i = 0; i < Math.min(10, query.length); i++) {
     res.push({
       name: query[i].name,
