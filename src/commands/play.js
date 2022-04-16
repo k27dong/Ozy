@@ -35,7 +35,7 @@ module.exports = {
       }
       await interaction.reply(play_message)
 
-      console.log(queue.track)
+      // console.log(queue.track)
 
       if (!queue.playing) {
         queue.playing = true
