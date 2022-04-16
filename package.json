@@ -28,6 +28,6 @@
     "discord-api-types": "^0.27.2",
     "discord.js": "^13.6.0",
     "libsodium-wrappers": "^0.7.9",
-    "NeteaseCloudMusicApi": "git+https://github.com/k27dong/NeteaseCloudMusicApi.git"
+    "NeteaseCloudMusicApi": "git+https://github.com/k27dong/NeteaseCloudMusicApi.git#V2"
   }
 }
