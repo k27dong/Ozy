@@ -6,7 +6,7 @@ const { play } = require("../player")
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("play")
-    .setDescription("play something")
+    .setDescription("播放音乐")
     .addStringOption((option) =>
       option.setName("搜索").setDescription("搜索音乐").setRequired(true)
     ),
