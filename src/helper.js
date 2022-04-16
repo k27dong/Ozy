@@ -115,9 +115,27 @@ const send_msg_to_text_channel = (interaction, content) => {
   interaction.client.channels.cache.get(interaction.channelId).send(content)
 }
 
+const shuffle = (array) => {
+  var curr_index = array.length,
+    temp_value,
+    ran_index
+
+  while (0 !== curr_index) {
+    ran_index = Math.floor(Math.random() * curr_index)
+    curr_index -= 1
+
+    temp_value = array[curr_index]
+    array[curr_index] = array[ran_index]
+    array[ran_index] = temp_value
+  }
+
+  return array
+}
+
 exports.populate_info = populate_info
 exports.assert_query_res = assert_query_res
 exports.assert_channel_play_queue = assert_channel_play_queue
 exports.display_track = display_track
 exports.send_msg_to_text_channel = send_msg_to_text_channel
 exports.parse_lrc = parse_lrc
+exports.shuffle = shuffle
