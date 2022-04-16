@@ -68,8 +68,6 @@ module.exports = {
                 text: `${selected_playlist.count} songs`,
               })
 
-            console.log(selected_playlist)
-
             interaction.editReply({
               content: `选择: **${selected_playlist.name}**`,
               components: [],
