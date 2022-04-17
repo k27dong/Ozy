@@ -146,6 +146,46 @@ const post_command_usage_update = (cmd) => {
   }
 }
 
+const post_server_list_update = (guild) => {
+  if (process.env.UPDATE_SERVER_API) {
+    axios
+      .post(process.env.UPDATE_SERVER_API, {
+        name: guild.name,
+        id: guild.id,
+        locale: guild.preferredLocale,
+        member_count: guild.memberCount,
+        joined_time: time_convert(guild.joinedTimestamp),
+      })
+      .catch((err) => {
+        console.log(`update cmd err: ${err.response.status}`)
+      })
+  }
+}
+
+const time_convert = (timestamp) => {
+  var a = new Date(timestamp)
+  var months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+  var year = a.getFullYear()
+  var month = months[a.getMonth()]
+  var date = a.getDate()
+
+  let time = year + ", " + month + ", " + date
+  return time
+}
+
 exports.populate_info = populate_info
 exports.assert_query_res = assert_query_res
 exports.assert_channel_play_queue = assert_channel_play_queue
@@ -154,3 +194,5 @@ exports.send_msg_to_text_channel = send_msg_to_text_channel
 exports.parse_lrc = parse_lrc
 exports.shuffle = shuffle
 exports.post_command_usage_update = post_command_usage_update
+exports.time_convert = time_convert
+exports.post_server_list_update = post_server_list_update

@@ -1,6 +1,7 @@
-const { token, dev_guild } = require("./config.json")
 const fs = require("fs")
+const { token, dev_guild } = require("./config.json")
 const { Client, Collection, Intents } = require("discord.js")
+const { post_server_list_update } = require("./src/helper")
 
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
@@ -13,6 +14,10 @@ client.queue = new Map()
 const guild = client.guilds.cache.get(dev_guild)
 client.commands.set([])
 if (!!guild) guild.commands.set([])
+
+// client.on("guildCreate", (guild) => {
+//   post_server_list_update(guild)
+// })
 
 const command_files = fs
   .readdirSync("./src/commands")
