@@ -1,3 +1,5 @@
+const { post_command_usage_update } = require("../helper")
+
 module.exports = {
   name: "interactionCreate",
   async execute(interaction) {
@@ -7,11 +9,10 @@ module.exports = {
       interaction.commandName
     )
 
-    // console.log(command);
-
     if (!command) return
 
     try {
+      post_command_usage_update(command.data.name)
       await command.execute(interaction)
     } catch (error) {
       console.error(error)

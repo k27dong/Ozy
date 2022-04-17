@@ -1,3 +1,5 @@
+const axios = require("axios")
+
 /**
  * Reads the interaction object from discord and parse it into
  * lightweight object
@@ -132,6 +134,18 @@ const shuffle = (array) => {
   return array
 }
 
+const post_command_usage_update = (cmd) => {
+  if (process.env.UPDATE_CMD_API) {
+    axios
+      .post(process.env.UPDATE_CMD_API, {
+        command_name: cmd,
+      })
+      .catch((err) => {
+        console.log(`update cmd err: ${err.response.status}`)
+      })
+  }
+}
+
 exports.populate_info = populate_info
 exports.assert_query_res = assert_query_res
 exports.assert_channel_play_queue = assert_channel_play_queue
@@ -139,3 +153,4 @@ exports.display_track = display_track
 exports.send_msg_to_text_channel = send_msg_to_text_channel
 exports.parse_lrc = parse_lrc
 exports.shuffle = shuffle
+exports.post_command_usage_update = post_command_usage_update
