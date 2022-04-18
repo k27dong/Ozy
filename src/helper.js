@@ -157,7 +157,7 @@ const post_server_list_update = (guild) => {
         joined_time: time_convert(guild.joinedTimestamp),
       })
       .catch((err) => {
-        console.log(`update cmd err: ${err.response.status}`)
+        console.log(`update cmd err: ${err}`)
       })
   }
 }
