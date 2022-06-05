@@ -9,10 +9,12 @@ const CONFIG = {
   PASSWORD: process.env.password,
   PHONENUM: process.env.phonenum,
   BOT_TOKEN: process.env.bot_token,
-  PREFIX: process.env.prefix
+  PREFIX: process.env.prefix,
 }
 
-const client = new Discord.Client()
+const all_intent = new Discord.Intents(32767)
+
+const client = new Discord.Client({ all_intent })
 client.commands = new Discord.Collection()
 client.config = CONFIG
 client.queue = new Map()
