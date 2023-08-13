@@ -1,4 +1,4 @@
-> **Note**
+> **Important**
 > The development of this project has been discontinued.
 >
 > Please use **[bamboo (竹)](https://github.com/k27dong/bamboo)**: A Discord bot for streaming NetEase Cloud Music
