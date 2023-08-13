@@ -1,3 +1,10 @@
+> **Note**
+> The development of this project has been discontinued.
+>
+> Please use **[bamboo (竹)](https://github.com/k27dong/bamboo)**: A Discord bot for streaming NetEase Cloud Music
+>
+> 一个播放网易云音乐的Discord机器人
+
 # Ozy
 
 从网易云播放的discord机器人
